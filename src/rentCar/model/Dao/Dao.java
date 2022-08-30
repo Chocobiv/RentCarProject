@@ -1,5 +1,7 @@
 package rentCar.model.Dao;
 
+import rentCar.model.Dto.CarDto;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -22,8 +24,8 @@ public class Dao {
     public static Dao getDao() { return dao; } // 4. Dao 객체 반환
 
     //1. 차량 등록 테스트 메소드
-    public boolean register( ) {
-        String sql = "INSERT INTO `차량` VALUES ('00누 5555','k7','준대형','그레이','LPG','에어백',5,'부산','-',80000)";
+    public boolean register(CarDto carDto) {
+        String sql = "INSERT INTO `차량` VALUES (?,?,'준대형','그레이','LPG','에어백',5,'부산','-',80000)";
         try {
             ps = con.prepareStatement(sql);
             ps.executeUpdate();

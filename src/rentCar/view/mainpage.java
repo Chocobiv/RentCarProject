@@ -26,9 +26,13 @@ public class mainpage {
             int ch = scanner.nextInt();
             if( ch == 1 ){
                 carController.register();
+            }else{
+                return;
             }
 
         }
+
+
     }
 
 }
