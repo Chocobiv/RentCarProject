@@ -53,6 +53,9 @@ public class mainpage {
                         String inputDriveNum = scanner.nextLine();
                         System.out.print("취득날짜를 입력하세요 (예시.2022-01-01): ");
                         String inputDriveDate = scanner.nextLine();
+
+                        //System.out.println("날짜:"+inputDriveDate);
+
                         System.out.print("생년월일을 입력하세요 (예시.2022-01-01): ");
                         String inputBirth = scanner.nextLine();
                         System.out.print("고객명을 입력하세요 (예시.홍길동): ");

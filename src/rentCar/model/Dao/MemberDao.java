@@ -25,7 +25,7 @@ public class MemberDao {
 
     //1. 고객 회원가입 메소드
     public boolean signup(MemberDto member) {
-        String sql = "INSERT INTO `고객` VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO '고객' VALUES (?,?,?,?,?,?,?,?)";
         try {
             ps = con.prepareStatement(sql);
 
@@ -34,11 +34,8 @@ public class MemberDao {
             ps.setInt( 5 , member.getAge() ); 	ps.setString( 6 , member.getAddr());
             ps.setString( 7 , member.getPhoneNum() ); 	ps.setString( 8 , member.getEmail());
 
-
             ps.executeUpdate();
             return true;
-
-
         }
         catch (Exception e) { System.out.println(e); }
         return false;
