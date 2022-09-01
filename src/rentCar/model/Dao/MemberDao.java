@@ -25,9 +25,19 @@ public class MemberDao {
 
     //1. 고객 회원가입 메소드
     public boolean signup(MemberDto member) {
-        String sql = "INSERT INTO '고객' VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO `고객` VALUES (?,?,?,?,?,?,?,?)";
         try {
             ps = con.prepareStatement(sql);
+
+            /*System.out.println(member.getDriveNum());
+            System.out.println(member.getDriveDate());
+            System.out.println(member.getBirth());
+            System.out.println(member.getName());
+            System.out.println(member.getAge());
+            System.out.println(member.getAddr());
+            System.out.println(member.getPhoneNum());
+            System.out.println(member.getEmail());*/
+
 
             ps.setString( 1 , member.getDriveNum() ); 	ps.setString( 2 , member.getDriveDate() );
             ps.setString( 3 , member.getBirth() );	ps.setString( 4 , member.getName() );
@@ -37,7 +47,16 @@ public class MemberDao {
             ps.executeUpdate();
             return true;
         }
-        catch (Exception e) { System.out.println(e); }
+        catch (Exception e) {
+            System.out.println(member.getDriveNum());
+            System.out.println(member.getDriveDate());
+            System.out.println(member.getBirth());
+            System.out.println(member.getName());
+            System.out.println(member.getAge());
+            System.out.println(member.getAddr());
+            System.out.println(member.getPhoneNum());
+            System.out.println(member.getEmail());
+            System.out.println(e); }
         return false;
     }
 
