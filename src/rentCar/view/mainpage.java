@@ -27,6 +27,8 @@ public class mainpage {
         }*/
 
         while(true){
+            Boolean checkedEmail = false;       //이메일 유효성 검사 결과
+
             System.out.println(" ------------------------------------------------------------------");
             System.out.println("| 렌트카 대여 서비스에 오신걸 환영합니다. 원하시는 서비스 번호를 입력해주세요. |");
             System.out.println(" ------------------------------------------------------------------");
@@ -57,6 +59,7 @@ public class mainpage {
                         String inputName = scanner.nextLine();
                         System.out.print("나이를 입력하세요 (예시.20): ");
                         int inputAge = scanner.nextInt();
+                        scanner.nextLine();             //개행문자 제거
                         System.out.print("주소를 입력하세요 (예시.인천): ");
                         String inputAddr = scanner.nextLine();
                         System.out.print("전화번호를 입력하세요 (예시.010-1234-1234): ");
@@ -68,14 +71,25 @@ public class mainpage {
                         System.out.println( member.toString() );
 
                         //* 유효성 검사 - Controller에서 *//*
-                        carController.signup();
+                        //carController.signup();
+                        checkedEmail = carController.signup(member);
 
-                        //* 입력받은 값 Dto에 담아서 Dao로 *//*
-                        boolean result = MemberDao.getmemberDao().signup( member );
-                        if( result ) {
-                            System.out.println("성공");
+                        if (checkedEmail) {         //유효성 검사 true
+
+                            //* 입력받은 값 Dto에 담아서 Dao로 *//*
+                            boolean result = MemberDao.getmemberDao().signup( member );
+                            if( result ) {
+                                System.out.println("성공");
+                            }else {
+                                System.out.println("실패");
+                            }
+
+                        }else {                     //유효성 검사 false
+                            System.out.println("예시를 참고하여 다시 입력해주세요.");
                         }
-                        else { System.out.println("실패"); }
+
+
+
 
 
                         break;
