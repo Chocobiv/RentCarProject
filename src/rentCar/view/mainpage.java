@@ -46,28 +46,29 @@ public class mainpage {
 
                         //비밀번호 확인도 해야함 -> controller에서 (근데 DB에 비밀번호가 없음!)
                         System.out.print("운전면허증번호를 입력하세요 (예시.12-12-123456-12): ");
-                        String inputDriveNum = scanner.nextLine();
+                        String inputDriveNum = scanner.next();
                         System.out.print("취득날짜를 입력하세요 (예시.2022-01-01): ");
-                        String inputDriveDate = scanner.nextLine();
+                        String inputDriveDate = scanner.next();
                         System.out.print("생년월일을 입력하세요 (예시.2022-01-01): ");
-                        String inputBirth = scanner.nextLine();
+                        String inputBirth = scanner.next();
                         System.out.print("고객명을 입력하세요 (예시.홍길동): ");
-                        String inputName = scanner.nextLine();
+                        String inputName = scanner.next();
                         System.out.print("나이를 입력하세요 (예시.20): ");
                         int inputAge = scanner.nextInt();
-                        scanner.nextLine();             //개행문자 제거
                         System.out.print("주소를 입력하세요 (예시.인천): ");
-                        String inputAddr = scanner.nextLine();
+                        String inputAddr = scanner.next();
                         System.out.print("전화번호를 입력하세요 (예시.010-1234-1234): ");
-                        String inputPhoneNum = scanner.nextLine();
+                        String inputPhoneNum = scanner.next();
                         System.out.print("이메일을 입력하세요 (예시.abc@abc.com): ");
-                        String inputEmail = scanner.nextLine();
+                        String inputEmail = scanner.next();
+                        //비밀번호 확인
+                        System.out.print("비밀번호 확인 (전화번호 뒷자리): ");
+                        String checkPW = scanner.next();
 
                         MemberDto member = new MemberDto(inputDriveNum,inputDriveDate,inputBirth,inputName,inputAge,inputAddr,inputPhoneNum,inputEmail);
-                        //System.out.println( member.toString() );
 
                         //* 유효성 검사 - Controller에서 *//
-                        carController.signup(member);
+                        carController.signup(member,checkPW);
 
                         break;
                     case 2:
@@ -81,8 +82,11 @@ public class mainpage {
                         String inputPW = scanner.next();
 
                         String getName = carController.signin(inputID,inputPW);
-                        if(getName!=null)
+                        if(getName!=null)   //정상 로그인
                             System.out.println(getName+"님 환영합니다.");
+                        else{               //운전면허증번호는 있지만 비밀번호가 틀린 경우
+                            System.out.println("비밀번호가 틀렸습니다. 다시 확인해주세요.\n");
+                        }
                         break;
                     case 3:
                         System.out.println("아이디 찾기");

@@ -19,32 +19,26 @@ public class CarController {
     //public static MemberDto member = new MemberDto();
 
     //1. 등록 서비스 (고객 회원가입)
-    public boolean signup(MemberDto member){
+    public boolean signup(MemberDto member,String checkPW){
         boolean result = false;         //return 값
 
         //유효성 검사 [정규표현식]
         String patternDriveNum = "^\\d{2}-\\d{2}-\\d{6}-\\d{2}$";
         //String patternAge = "^[0-9]*$";
-        //String patternDate = "^\\\\d{4}\\\\-(0[1-9]|1[012])\\\\-(0[1-9]|[12][0-9]|3[01])$";
-        //String patternDate = "^([12]\\\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\\\d|3[01]))$";
-        //String patternDate = "/^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$/";
-        String patternPhone = "^\\d{3}-\\d{3,4}-\\d{4}$";
+        String patternPhone = "^\\d{3}-\\d{4}-\\d{4}$";
         String patternEmail = "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
 
 
-        //입력받은 회원정보 값들
-        String inputDriveNum = member.getDriveNum();
-        String inputDriveDate = member.getDriveDate();
-        String inputBirth = member.getBirth();
-        String inputName = member.getName();
-        int inputAge = member.getAge();
-        String inputAddr = member.getAddr();
-        String inputPhoneNum = member.getPhoneNum();
-        String inputEmail = member.getEmail();
 
+        //비밀번호 확인을 먼저 함
+        String phoneSlice = member.getPhoneNum().substring(9, 13);
+        if (!checkPW.equals(phoneSlice)) {  //비밀번호 확인이 다를 경우
+            System.out.println("비밀번호 확인이 올바르지 않습니다. [다시 입력]");
+            return result;                  //아래 코드 실행x
+        }
 
         //운전면허번호
-        if(Pattern.matches(patternDriveNum, inputDriveNum)&&inputDriveNum!=null) {
+        if(Pattern.matches(patternDriveNum, member.getDriveNum())&&member.getDriveNum()!=null) {
             result = true;
         } else {
             System.out.println("올바른 운전면허번호가 아닙니다. ");
@@ -57,7 +51,7 @@ public class CarController {
         try{
             SimpleDateFormat dateFormat = new  SimpleDateFormat("yyyy-MM-dd");
             dateFormat.setLenient(false);
-            dateFormat.parse(inputDriveDate);
+            dateFormat.parse(member.getDriveDate());
             result = true;
         }catch (ParseException e){
             System.out.println("올바른 날짜 형식이 아닙니다.");
@@ -70,7 +64,7 @@ public class CarController {
         try{
             SimpleDateFormat dateFormat = new  SimpleDateFormat("yyyy-MM-dd");
             dateFormat.setLenient(false);
-            dateFormat.parse(inputBirth);
+            dateFormat.parse(member.getBirth());
             result = true;
         }catch (ParseException e){
             System.out.println("올바른 날짜 형식이 아닙니다.");
@@ -80,7 +74,7 @@ public class CarController {
 
 
         //이름
-        if(inputName==null) {
+        if(member.getName()==null) {
             System.out.println("이름을 입력해주세요. ");
             result = false;
             return result;
@@ -89,7 +83,7 @@ public class CarController {
 
         //생년월일
         //if(Pattern.matches(patternAge, Integer.toString(inputAge)) && inputAge>=20){
-        if(inputAge>=20){
+        if(member.getAge()>=20){
             //System.out.println("올바른 나이입니다. ");
             result = true;
         } else {
@@ -100,7 +94,7 @@ public class CarController {
 
 
         //주소
-        if(inputAddr==null) {
+        if(member.getAddr()==null) {
             System.out.println("주소를 입력해주세요. ");
             result = false;
             return result;
@@ -108,7 +102,7 @@ public class CarController {
 
 
         //전화번호
-        if(Pattern.matches(patternPhone, inputPhoneNum)&&inputPhoneNum!=null) {
+        if(Pattern.matches(patternPhone, member.getPhoneNum())&&member.getPhoneNum()!=null) {
             //System.out.println("올바른 휴대전화 형식입니다. ");
             result = true;
 
@@ -121,7 +115,7 @@ public class CarController {
 
 
         //이메일
-        if(Pattern.matches(patternEmail, inputEmail)) {
+        if(Pattern.matches(patternEmail, member.getEmail())) {
             //System.out.println("올바른 이메일 형식입니다. ");
             result = true;
         } else {
@@ -167,8 +161,6 @@ public class CarController {
             if (slice.equals(pw)){      //로그인 성공
                 return checkPhoneNum[0];
             }
-        }else {                     //DB에서 가져온 전화번호가 null이면
-            System.out.println("Con) 예시를 참고하여 다시 입력해주세요.");
         }
 
         return null;
