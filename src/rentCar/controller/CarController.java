@@ -152,14 +152,27 @@ public class CarController {
         }
 
 
-
-
         return result;
         //MemberDao.getmemberDao().signup(member);
 
     }
 
-    //운전면허증번호(PK) 중복검사
+    //로그인
+    public String signin(String id, String pw){
+        String[] checkPhoneNum = MemberDao.getmemberDao().signin(id);
+
+        if (checkPhoneNum!=null) {         //DB에서 가져온 전화번호가 있으면
+            //사용자가 입력한 비밀번호와 가져온 전화번호의 뒷자리가 일치하는지 확인
+            String slice = checkPhoneNum[1].substring(9, 13);
+            if (slice.equals(pw)){      //로그인 성공
+                return checkPhoneNum[0];
+            }
+        }else {                     //DB에서 가져온 전화번호가 null이면
+            System.out.println("Con) 예시를 참고하여 다시 입력해주세요.");
+        }
+
+        return null;
+    }
 
 
     //2. 삭제 서비스

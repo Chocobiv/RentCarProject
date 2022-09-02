@@ -41,10 +41,9 @@ public class mainpage {
                         System.out.println("| 회원가입 |");
                         System.out.println(" ---------");
 
-                        //개행문자 제거 - 운전면허증번호 입력을 안받고 넘어가는 문제 발생 -> 해결ㄴ
+                        //개행문자 제거 - 운전면허증번호 입력을 안받고 넘어가는 문제 발생 -> 해결
                         scanner.nextLine();
 
-                        //입력하라는 말 써야함. 그리고 형식 예시도 필요
                         //비밀번호 확인도 해야함 -> controller에서 (근데 DB에 비밀번호가 없음!)
                         System.out.print("운전면허증번호를 입력하세요 (예시.12-12-123456-12): ");
                         String inputDriveNum = scanner.nextLine();
@@ -65,16 +64,25 @@ public class mainpage {
                         String inputEmail = scanner.nextLine();
 
                         MemberDto member = new MemberDto(inputDriveNum,inputDriveDate,inputBirth,inputName,inputAge,inputAddr,inputPhoneNum,inputEmail);
-                        System.out.println( member.toString() );
+                        //System.out.println( member.toString() );
 
                         //* 유효성 검사 - Controller에서 *//
                         carController.signup(member);
 
                         break;
                     case 2:
-                        System.out.println(" ---------");
+                        System.out.println(" -------");
                         System.out.println("| 로그인 |");
-                        System.out.println(" ---------");
+                        System.out.println(" -------");
+
+                        System.out.print("회원님의 운전면허증번호를 입력하세요 (예시.12-12-123456-12): ");
+                        String inputID = scanner.next();
+                        System.out.print("비밀번호를 입력하세요 (핸드폰번호 뒷자리): ");
+                        String inputPW = scanner.next();
+
+                        String getName = carController.signin(inputID,inputPW);
+                        if(getName!=null)
+                            System.out.println(getName+"님 환영합니다.");
                         break;
                     case 3:
                         System.out.println("아이디 찾기");

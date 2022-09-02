@@ -71,5 +71,24 @@ public class MemberDao {
         return false;
     }
 
-
+    //로그인 메소드
+    public String[] signin(String id){
+        String sql = "select 고객명,전화번호 from 고객 where 운전면허증번호 = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1,id );
+            rs = ps.executeQuery();
+            // 동일한 아이디가 존재하면
+            if( rs.next() ) {
+                //DB에서 운전면허증번호로 검색된 레코드
+                String getName = rs.getString(1);
+                String getPhoneNum = rs.getString(2);
+                String[] results = {getName,getPhoneNum};
+                return results; // 검색된 전화번호 반환
+            }
+        }catch (Exception e) { System.out.println( e );}
+        // 동일한 아이디가 존재하지 않으면
+        System.out.println("Dao) 해당 회원 정보가 없습니다. 운전면허증번호를 다시 확인하세요.");
+        return null;
+    }
 }
