@@ -13,8 +13,6 @@ public class mainpage {
 
     public static void main(String[] args) {
 
-
-
         /*
         while ( true ){
             System.out.println("1.등록 2.~~~~~~");
@@ -27,7 +25,6 @@ public class mainpage {
         }*/
 
         while(true){
-            Boolean checkedEmail = false;       //이메일 유효성 검사 결과
 
             System.out.println(" ------------------------------------------------------------------");
             System.out.println("| 렌트카 대여 서비스에 오신걸 환영합니다. 원하시는 서비스 번호를 입력해주세요. |");
@@ -53,9 +50,6 @@ public class mainpage {
                         String inputDriveNum = scanner.nextLine();
                         System.out.print("취득날짜를 입력하세요 (예시.2022-01-01): ");
                         String inputDriveDate = scanner.nextLine();
-
-                        //System.out.println("날짜:"+inputDriveDate);
-
                         System.out.print("생년월일을 입력하세요 (예시.2022-01-01): ");
                         String inputBirth = scanner.nextLine();
                         System.out.print("고객명을 입력하세요 (예시.홍길동): ");
@@ -73,31 +67,14 @@ public class mainpage {
                         MemberDto member = new MemberDto(inputDriveNum,inputDriveDate,inputBirth,inputName,inputAge,inputAddr,inputPhoneNum,inputEmail);
                         System.out.println( member.toString() );
 
-                        //* 유효성 검사 - Controller에서 *//*
-                        //carController.signup();
-                        checkedEmail = carController.signup(member);
-
-                        if (checkedEmail) {         //유효성 검사 true
-
-                            //* 입력받은 값 Dto에 담아서 Dao로 *//*
-                            boolean result = MemberDao.getmemberDao().signup( member );
-                            if( result ) {
-                                System.out.println("성공");
-                            }else {
-                                System.out.println("실패");
-                            }
-
-                        }else {                     //유효성 검사 false
-                            System.out.println("예시를 참고하여 다시 입력해주세요.");
-                        }
-
-
-
-
+                        //* 유효성 검사 - Controller에서 *//
+                        carController.signup(member);
 
                         break;
                     case 2:
-                        System.out.println("로그인");
+                        System.out.println(" ---------");
+                        System.out.println("| 로그인 |");
+                        System.out.println(" ---------");
                         break;
                     case 3:
                         System.out.println("아이디 찾기");

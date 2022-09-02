@@ -3,6 +3,9 @@ package rentCar.controller;
 import rentCar.model.Dao.MemberDao;
 import rentCar.model.Dto.MemberDto;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.regex.Matcher;
@@ -12,12 +15,12 @@ import java.util.regex.Pattern;
 /* equls() 또는 정규표현식 사용 */
 public class CarController {
 
+
     //public static MemberDto member = new MemberDto();
 
     //1. 등록 서비스 (고객 회원가입)
     public boolean signup(MemberDto member){
         boolean result = false;         //return 값
-
 
         //유효성 검사 [정규표현식]
         String patternDriveNum = "^\\d{2}-\\d{2}-\\d{6}-\\d{2}$";
@@ -41,18 +44,23 @@ public class CarController {
 
 
         //운전면허번호
-
+        if(Pattern.matches(patternDriveNum, inputDriveNum)&&inputDriveNum!=null) {
+            result = true;
+        } else {
+            System.out.println("올바른 운전면허번호가 아닙니다. ");
+            result = false;
+            return result;
+            //throw new IllegalArgumentException("That is an invalid value.");
+        }
 
         //취득날짜
         try{
             SimpleDateFormat dateFormat = new  SimpleDateFormat("yyyy-MM-dd");
-
             dateFormat.setLenient(false);
             dateFormat.parse(inputDriveDate);
             result = true;
-
         }catch (ParseException e){
-            System.out.println("올바른 날짜 형식이 아닙니다.1 ");
+            System.out.println("올바른 날짜 형식이 아닙니다.");
             result = false;
             return result;
         }
@@ -61,13 +69,11 @@ public class CarController {
         //생년월일
         try{
             SimpleDateFormat dateFormat = new  SimpleDateFormat("yyyy-MM-dd");
-
             dateFormat.setLenient(false);
             dateFormat.parse(inputBirth);
             result = true;
-
         }catch (ParseException e){
-            System.out.println("올바른 날짜 형식이 아닙니다.2 ");
+            System.out.println("올바른 날짜 형식이 아닙니다.");
             result = false;
             return result;
         }
@@ -125,10 +131,37 @@ public class CarController {
             //throw new IllegalArgumentException("That is an invalid value.");
         }
 
+
+
+        //운전면허증번호 중복검사
+        boolean checkedDriveId = MemberDao.getmemberDao().checkedId( member.getDriveNum() );
+
+        if ( result  && !checkedDriveId) {         //유효성 검사랑 운전면허증번호(PK) 중복체크 true
+
+            //* 입력받은 값 Dto에 담아서 Dao로 *//
+            //MemberDao.getmemberDao() : 매번 new MemberDao하기 귀찮으니까 MemberDao객체 생성해서 get하는 메소드
+            boolean result1 = MemberDao.getmemberDao().signup( member );
+            if( result1 ) {
+                System.out.println("성공");
+            }else {
+                System.out.println("실패");
+            }
+
+        }else {                     //유효성 검사 false
+            System.out.println("예시를 참고하여 다시 입력해주세요.");
+        }
+
+
+
+
         return result;
         //MemberDao.getmemberDao().signup(member);
 
     }
+
+    //운전면허증번호(PK) 중복검사
+
+
     //2. 삭제 서비스
     //3. 수정 서비스 등등등
 
