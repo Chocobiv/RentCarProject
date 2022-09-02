@@ -36,7 +36,7 @@ public class mainpage {
                 int inputServiceNum2 = scanner.nextInt();
 
                 switch (inputServiceNum2) {
-                    case 1:
+                    case 1:         //회원가입(데이터 저장)
                         System.out.println(" ---------");
                         System.out.println("| 회원가입 |");
                         System.out.println(" ---------");
@@ -71,7 +71,7 @@ public class mainpage {
                         carController.signup(member,checkPW);
 
                         break;
-                    case 2:
+                    case 2:         //로그인
                         System.out.println(" -------");
                         System.out.println("| 로그인 |");
                         System.out.println(" -------");
@@ -83,19 +83,53 @@ public class mainpage {
 
                         String getName = carController.signin(inputID,inputPW);
                         if(getName!=null)   //정상 로그인
-                            System.out.println(getName+"님 환영합니다.");
+                            System.out.println(getName+"님 환영합니다.");     //로그인한 고객의 이름
                         else{               //운전면허증번호는 있지만 비밀번호가 틀린 경우
                             System.out.println("비밀번호가 틀렸습니다. 다시 확인해주세요.\n");
                         }
                         break;
-                    case 3:
-                        System.out.println("아이디 찾기");
+                    case 3:         //운전면허증번호(PK) 찾기
+                        System.out.println(" -----------");
+                        System.out.println("| 아이디 찾기 |");
+                        System.out.println(" -----------");
+
+                        //고객명, 전화번호 이용
+                        System.out.print("성함을 입력하세요 : ");
+                        inputName = scanner.next();
+                        System.out.print("가입시 입력한 전화번호를 입력하세요 (예시.010-1234-1234): ");
+                        inputPhoneNum = scanner.next();
+                        
+                        //정상적으로 아이디(운전면허증번호)를 찾았을 경우 운전면허증번호를 반환
+                        String getDriveNum = carController.findDriveNum(inputName,inputPhoneNum);
+                        if(getDriveNum!=null)   //정상적으로 아이디 찾음
+                            System.out.println(inputName+"님의 운전면허증번호는 "+getDriveNum+" 입니다.");
+                        else{                   //사용자가 입력한 고객명과 전화번호와 동일한 아이디 못 찾음
+                            System.out.println("고객 정보가 잘못되었습니다. 다시 확인해주세요.\n");
+                        }
+
                         break;
                     case 4:
-                        System.out.println("비밀번호 찾기");
+                        System.out.println(" -------------");
+                        System.out.println("| 비밀번호 찾기 |");
+                        System.out.println(" -------------");
+
+                        //아이디(운전면허증번호), 이메일 이용
+                        System.out.print("ID(운전면허증번호)를 입력하세요 : ");
+                        inputName = scanner.next();
+                        System.out.print("가입시 입력한 이메일을 입력하세요 (예시.abc@abc.com): ");
+                        inputEmail = scanner.next();
+
+                        //정상적으로 비밀번호(전화번호 뒷자리)를 찾았을 경우 비밀번호를 반환
+                        String getPW = carController.findPassword(inputName,inputEmail);
+                        if(getPW!=null)         //정상적으로 비밀번호 찾음
+                            System.out.println("비밀번호는 "+getPW+" 입니다.");
+                        else{                   //사용자가 입력한 아이디과 전화번호와 동일한 비밀번호 못 찾음
+                            System.out.println("고객 정보가 잘못되었습니다. 다시 확인해주세요.\n");
+                        }
+
                         break;
                     default:
-                        System.out.println("알맞는 서비스 번호를 입력해주세요.");
+                        System.out.println("선택할 수 없는 서비스 번호입니다.");
                         break;
                 }
                 

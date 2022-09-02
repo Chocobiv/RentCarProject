@@ -91,4 +91,50 @@ public class MemberDao {
         System.out.println("Dao) 해당 회원 정보가 없습니다. 운전면허증번호를 다시 확인하세요.");
         return null;
     }
+    
+    //아이디(운전면허증번호) 찾기 메소드
+    //고객명, 전화번호 이용 -> 둘이 일치하는 고객 정보가 있는 경우 운전면허증번호를 반환
+    public String findDriveNum(String name,String phoneNum){
+        String sql = "select 운전면허증번호 from 고객 where 고객명 = ? and 전화번호 = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1,name );
+            ps.setString(2,phoneNum );
+            rs = ps.executeQuery();
+            // 동일한 아이디가 존재하면
+            if( rs.next() ) {       //동일한 값이 있으면 = 성공
+                //운전면허증번호 가져와서 return
+                String getDriveNum = rs.getString(1);
+                return getDriveNum; // 검색된 운전면허증번호 반환
+            }
+            return null;        //동일한 값이 없으면 = 실패
+
+        }catch (Exception e) { System.out.println( e );}    //DB error
+        // 동일한 아이디가 존재하지 않으면
+        System.out.println("Dao) 해당 회원 정보가 없습니다.");
+        return null;
+    }
+
+    //비밀번호(전화번호 뒷자리) 찾기 메소드
+    //아이디(운전면허증번호), 이메일 이용 -> 둘이 일치하는 고객 정보가 있는 경우 비밀번호(전화번호 뒷자리)를 반환
+    public String findPassword(String name,String email){
+        String sql = "select 전화번호 from 고객 where 운전면허증번호 = ? and 이메일 = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1,name );
+            ps.setString(2,email );
+            rs = ps.executeQuery();
+            // 동일한 정보가 존재하면
+            if( rs.next() ) {       //동일한 값이 있으면 = 성공
+                //운전면허증번호 가져와서 return
+                String getDriveNum = rs.getString(1);
+                return getDriveNum;     // 검색된 전화번호(전체) 반환
+            }
+            return null;        //동일한 값이 없으면 = 실패
+
+        }catch (Exception e) { System.out.println( e );}    //DB error
+        // 동일한 정보가 존재하지 않으면
+        return null;
+    }
+
 }
