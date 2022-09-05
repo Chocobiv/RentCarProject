@@ -1,7 +1,9 @@
 package rentCar.view;
 
 import rentCar.controller.CarController;
-import rentCar.model.Dao.MemberDao;
+import rentCar.controller.MemberController;
+import rentCar.model.Dto.CarDto;
+import rentCar.model.Dto.LoginDto;
 import rentCar.model.Dto.MemberDto;
 
 import java.util.Scanner;
@@ -9,8 +11,9 @@ import java.util.Scanner;
 public class mainpage {
 
     public static Scanner scanner = new Scanner(System.in);
+    public static MemberController memberController = new MemberController();
     public static CarController carController = new CarController();
-
+    public static LoginDto logindto = new LoginDto();
     public static void main(String[] args) {
 
         /*
@@ -67,7 +70,7 @@ public class mainpage {
                             MemberDto member = new MemberDto(inputDriveNum, inputDriveDate, inputBirth, inputName, inputAge, inputAddr, inputPhoneNum, inputEmail);
 
                             //* 유효성 검사 - Controller에서 *//
-                            carController.signup(member, checkPW);
+                            memberController.signup(member, checkPW);
 
                             break;
                         case 2:         //로그인
@@ -80,7 +83,7 @@ public class mainpage {
                             System.out.print("비밀번호를 입력하세요 (핸드폰번호 뒷자리): ");
                             String inputPW = scanner.next();
 
-                            String getName = carController.signin(inputID, inputPW);
+                            String getName = memberController.signin(inputID, inputPW);
                             if (getName != null)   //정상 로그인
                                 System.out.println(getName + "님 환영합니다.");     //로그인한 고객의 이름
                             else {               //운전면허증번호는 있지만 비밀번호가 틀린 경우
@@ -99,7 +102,7 @@ public class mainpage {
                             inputPhoneNum = scanner.next();
 
                             //정상적으로 아이디(운전면허증번호)를 찾았을 경우 운전면허증번호를 반환
-                            String getDriveNum = carController.findDriveNum(inputName, inputPhoneNum);
+                            String getDriveNum = memberController.findDriveNum(inputName, inputPhoneNum);
                             if (getDriveNum != null)   //정상적으로 아이디 찾음
                                 System.out.println(inputName + "님의 운전면허증번호는 " + getDriveNum + " 입니다.");
                             else {                   //사용자가 입력한 고객명과 전화번호와 동일한 아이디 못 찾음
@@ -119,7 +122,7 @@ public class mainpage {
                             inputEmail = scanner.next();
 
                             //정상적으로 비밀번호(전화번호 뒷자리)를 찾았을 경우 비밀번호를 반환
-                            String getPW = carController.findPassword(inputName, inputEmail);
+                            String getPW = memberController.findPassword(inputName, inputEmail);
                             if (getPW != null)         //정상적으로 비밀번호 찾음
                                 System.out.println("비밀번호는 " + getPW + " 입니다.");
                             else {                   //사용자가 입력한 아이디과 전화번호와 동일한 비밀번호 못 찾음
@@ -137,15 +140,42 @@ public class mainpage {
                     String masterID = scanner.next();
                     System.out.print("비밀번호를 입력하세요: ");
                     String masterPW = scanner.next();
+                    //관리자 계정 로그인 성공
                     if(masterID.equals("admin") && masterPW.equals("1234")){
                         System.out.println("관리자님 환영합니다. 렌탈 차량 등록을 시작합니다.");
+                        logindto.setId("admin");        //로그인 유지를 위한 set
+                        System.out.println(" --------------");
+                        System.out.println("| 렌탈 차량 등록 |");
+                        System.out.println(" --------------");
 
+                        String inputCarNum = scanner.nextLine();        //scanner 씹힘 방지
+                        System.out.print("차량 번호를 입력하세요 (예시.00아 2222): ");
+                        inputCarNum = scanner.nextLine();
+                        System.out.print("렌트카 이름을 입력하세요 (예시.k7): ");
+                        String inputCarName = scanner.next();
+                        System.out.print("차 종류를 입력하세요 (예시.대형): ");
+                        String inputCarType = scanner.next();
+                        System.out.print("색상을 입력하세요 (예시.그레이): ");
+                        String inputCarColor = scanner.next();
+                        System.out.print("연료를 입력하세요 (예시.LPG): ");
+                        String inputcarFuel = scanner.next();
+                        System.out.print("차량 옵션을 입력하세요 (예시.에어백): ");
+                        String inputCarOption = scanner.next();
+                        System.out.print("승차 인원수를 입력하세요 (예시.5): ");
+                        int inputCarPersonnel = scanner.nextInt();
+                        System.out.print("지역을 입력하세요 (예시.서울): ");
+                        String inputCarRegion = scanner.next();
+                        System.out.print("상세정보를 입력하세요 : ");
+                        String inputCarDetail = scanner.next();
+                        System.out.print("일일 대여 비용을 입력하세요 (예시.80000): ");
+                        int inputCost = scanner.nextInt();
 
-
+                        CarDto car = new CarDto(inputCarNum,inputCarName,inputCarType,inputCarColor,inputcarFuel,inputCarOption,inputCarPersonnel,inputCarRegion,inputCarDetail,inputCost);
+                        carController.resisterCar(car);
                     }else{
                         System.out.println("관리자 계정 정보가 잘못되었습니다.");
                     }
-                    return;
+                    System.out.println("main) 끝남\n");
                 } else {
                     System.out.println("알맞는 서비스 번호를 입력해주세요.");
                 }
