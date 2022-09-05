@@ -56,18 +56,7 @@ public class MemberDao {
             ps.executeUpdate();
             return true;
         }
-        catch (Exception e) {
-            //test
-            /*System.out.println(member.getDriveNum());
-            System.out.println(member.getDriveDate());
-            System.out.println(member.getBirth());
-            System.out.println(member.getName());
-            System.out.println(member.getAge());
-            System.out.println(member.getAddr());
-            System.out.println(member.getPhoneNum());
-            System.out.println(member.getEmail());*/
-
-            System.out.println(e); }
+        catch (Exception e) { System.out.println(e); }
         return false;
     }
 
