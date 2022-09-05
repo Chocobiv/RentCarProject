@@ -84,9 +84,45 @@ public class mainpage {
                             String inputPW = scanner.next();
 
                             String getName = memberController.signin(inputID, inputPW);
-                            if (getName != null)   //정상 로그인
-                                System.out.println(getName + "님 환영합니다.");     //로그인한 고객의 이름
-                            else {               //운전면허증번호는 있지만 비밀번호가 틀린 경우
+                            if (getName != null) {  //정상 로그인
+                                if(logindto.getId()==null){         //로그인한 사람이 없으면
+                                    logindto.setId(inputID);        //로그인한 고객의 ID(운전면허증번호) loginDto로 set
+                                    System.out.println(getName + "님 환영합니다.");     //로그인한 고객의 이름
+
+                                    System.out.println("\n메뉴 : 1.렌탈대여  2.렌탈반납  3.내 정보  4.로그아웃");
+                                    System.out.print("선택 : ");
+                                    int menu = scanner.nextInt();
+                                    switch (menu){
+                                        case 1:
+                                            System.out.println(" --------");
+                                            System.out.println("| 렌탈대여 |");
+                                            System.out.println(" --------");
+                                            //구현해야함~~~~~~~~~~~~~~~~~~~~~~~~!!!!!!!
+                                            break;
+                                        case 2:
+                                            System.out.printf("2. 선택");
+                                            break;
+                                        case 3:
+                                            System.out.printf("3. 선택");
+                                            break;
+                                        case 4:
+                                            System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.");
+                                            logindto.setId(null);   //로그인 정보 담고 있는 logindto를 null로 만듦
+                                            break;
+                                        default:
+                                            System.out.printf("선택할 수 없는 번호입니다.");
+                                    }
+                                }else{                      //로그인한 사람이 있으면
+                                    System.out.println("로그인한 사람이 있습니다. 로그아웃해주세요.");
+                                    System.out.printf("로그아웃하시겠습니까? [Y][N] ");
+                                    String answer = scanner.next();
+                                    if(answer.equals("Y") || answer.equals("y")) {
+                                        System.out.printf("정상적으로 로그아웃되었습니다. 안녕히가십시오.");
+                                        logindto.setId(null);       //로그인 정보 담고 있는 logindto를 null로 만듦
+                                    }
+                                }
+
+                            }else {               //운전면허증번호는 있지만 비밀번호가 틀린 경우
                                 System.out.println("비밀번호가 틀렸습니다. 다시 확인해주세요.\n");
                             }
                             break;
