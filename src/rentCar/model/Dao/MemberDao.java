@@ -77,7 +77,7 @@ public class MemberDao {
             }
         }catch (Exception e) { System.out.println( e );}
         // 동일한 아이디가 존재하지 않으면
-        System.out.println("Dao) 해당 회원 정보가 없습니다. 운전면허증번호를 다시 확인하세요.");
+        //System.out.println("해당 회원 정보가 없습니다. 운전면허증번호를 다시 확인하세요.");
         return null;
     }
     

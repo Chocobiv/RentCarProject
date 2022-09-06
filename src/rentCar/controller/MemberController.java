@@ -137,13 +137,30 @@ public class MemberController {
 
     //로그인
     public String signin(String id, String pw){
-        String[] checkPhoneNum = MemberDao.getmemberDao().signin(id);
+        boolean result;
+        String patternDriveNum = "^\\d{2}-\\d{2}-\\d{6}-\\d{2}$";
+        //운전면허번호 - 유효성 검사
+        if(Pattern.matches(patternDriveNum, id) && id!=null) {
+            result = true;
+        } else {
+            System.out.println("올바른 운전면허번호가 아닙니다. ");
+            result = false;
+            return "2";
+            //throw new IllegalArgumentException("That is an invalid value.");
+        }
 
-        if (checkPhoneNum!=null) {         //DB에서 가져온 전화번호가 있으면
-            //사용자가 입력한 비밀번호와 가져온 전화번호의 뒷자리가 일치하는지 확인
-            String slice = checkPhoneNum[1].substring(9, 13);
-            if (slice.equals(pw)){      //로그인 성공
-                return checkPhoneNum[0];
+        String[] checkPhoneNum = new String[2];
+        if (result){
+            checkPhoneNum = MemberDao.getmemberDao().signin(id);
+
+            if (checkPhoneNum!=null) {         //DB에서 가져온 전화번호가 있으면
+                //사용자가 입력한 비밀번호와 가져온 전화번호의 뒷자리가 일치하는지 확인
+                String slice = checkPhoneNum[1].substring(9, 13);
+                if (slice.equals(pw)){      //로그인 성공
+                    return checkPhoneNum[0];
+                }
+            }else{      //DB에서 가져온 회원정보가 없으면
+                return "1";
             }
         }
 
@@ -155,10 +172,8 @@ public class MemberController {
     public String findDriveNum(String name, String phoneNum){
         String findId = MemberDao.getmemberDao().findDriveNum(name,phoneNum);
 
-        if (findId!=null) {         //DB에서 가져온 운전면허증번호가 있으면
-            return findId;
-        }
-        return null;
+        //DB에서 가져온 운전면허증번호가 있으면
+        return findId;
     }
 
 

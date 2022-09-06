@@ -87,9 +87,9 @@ public class mainpage {
                             String inputPW = scanner.next();
 
                             String getName = memberController.signin(inputID, inputPW);
-                            if (getName != null) {  //정상 로그인
-                                if(logindto.getId()==null){         //로그인한 사람이 없으면
-                                    logindto.setId(inputID);        //로그인한 고객의 ID(운전면허증번호) loginDto로 set
+                            if (getName != null && getName != "1" && getName != "2") {  //정상 로그인
+                                if(LoginDto.getId()==null){         //로그인한 사람이 없으면
+                                    LoginDto.setId(inputID);        //로그인한 고객의 ID(운전면허증번호) loginDto로 set
                                     System.out.println(getName + "님 환영합니다.");     //로그인한 고객의 이름
 
                                     System.out.println("\n메뉴 : 1.렌탈대여  2.렌탈반납  3.내 정보  4.로그아웃");
@@ -113,41 +113,43 @@ public class mainpage {
                                             //String inputPaymentNum = scanner.next();
                                             //System.out.print("차량 옵션을 입력하세요 (예시.에어백): ");
                                             //String inputInsuranceNum = scanner.next();
-                                            RentalDto rental = new RentalDto(inputStartDay,inputPeriod,logindto.getId(),inputCarNum,"00001","00000004");
+                                            RentalDto rental = new RentalDto(inputStartDay,inputPeriod, LoginDto.getId(),inputCarNum,"00001","00000004");
 
                                             rentalController.rental(rental);
                                             break;
                                         case 2:
-                                            System.out.printf("2. 선택");
+                                            System.out.print("2. 선택");
                                             break;
                                         case 3:
-                                            System.out.printf("3. 선택");
+                                            System.out.print("3. 선택");
                                             break;
                                         case 4:
                                             System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.");
-                                            logindto.setId(null);   //로그인 정보 담고 있는 logindto를 null로 만듦
+                                            LoginDto.setId(null);   //로그인 정보 담고 있는 logindto를 null로 만듦
                                             break;
                                         default:
-                                            System.out.printf("선택할 수 없는 번호입니다.");
+                                            System.out.print("선택할 수 없는 번호입니다.");
                                     }
                                 }else{                      //로그인한 사람이 있으면
                                     System.out.println("로그인한 사람이 있습니다. 로그아웃해주세요.");
-                                    System.out.printf("로그아웃하시겠습니까? [Y][N] ");
+                                    System.out.print("로그아웃하시겠습니까? [Y][N] ");
                                     String answer = scanner.next();
                                     if(answer.equals("Y") || answer.equals("y")) {
                                         System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.\n");
-                                        logindto.setId(null);       //로그인 정보 담고 있는 logindto를 null로 만듦
+                                        LoginDto.setId(null);       //로그인 정보 담고 있는 logindto를 null로 만듦
                                     } else if (answer.equals("N") || answer.equals("n")) {
                                         System.out.println("로그아웃을 취소했습니다. 메인으로 돌아갑니다.");
                                     }else{
                                         System.out.println("알맞지 않은 입력입니다.");
                                     }
                                 }
-
-                            }else {               //운전면허증번호는 있지만 비밀번호가 틀린 경우
+                            }else if(getName == "1") {      //운전면허번호 유효성 검사까지 통과했지만 고객 테이블에 해당 아이디가 없을 경우
+                                System.out.println("해당 운전면허번호 정보가 없습니다. 다시 확인해주세요.\n");
+                            }else if(getName == null) {               //운전면허증번호는 있지만 비밀번호가 틀린 경우
                                 System.out.println("비밀번호가 틀렸습니다. 다시 확인해주세요.\n");
                             }
                             break;
+
                         case 3:         //운전면허증번호(PK) 찾기
                             System.out.println(" -----------");
                             System.out.println("| 아이디 찾기 |");
@@ -194,14 +196,15 @@ public class mainpage {
                     }
 
                 } else if (inputServiceNum1 == 2) {  //관리자 선택 시
+                    System.out.println("들어옴");
                     //로그인한 아이디가 있을 경우
-                    if(!logindto.getId().equals(null)){
+                    if( LoginDto.getId()!=null ){   //null은 equals가 안됨!!!!!!!!!
                         System.out.println("로그인한 사람이 있습니다. 로그아웃해주세요.");
-                        System.out.printf("로그아웃하시겠습니까? [Y][N] ");
+                        System.out.print("로그아웃하시겠습니까? [Y][N] ");
                         String answer = scanner.next();
                         if(answer.equals("Y") || answer.equals("y")) {
                             System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.\n");
-                            logindto.setId(null);       //로그인 정보 담고 있는 logindto를 null로 만듦
+                            LoginDto.setId(null);       //로그인 정보 담고 있는 logindto를 null로 만듦
                         } else if (answer.equals("N") || answer.equals("n")) {
                             System.out.println("로그아웃을 취소했습니다. 메인으로 돌아갑니다.");
                         }else{
@@ -215,7 +218,7 @@ public class mainpage {
                         //관리자 계정 로그인 성공
                         if (masterID.equals("admin") && masterPW.equals("1234")) {
                             System.out.println("관리자님 환영합니다. 렌탈 차량 등록을 시작합니다.");
-                            logindto.setId("admin");        //로그인 유지를 위한 set
+                            LoginDto.setId("admin");        //로그인 유지를 위한 set
                             System.out.println(" --------------");
                             System.out.println("| 렌탈 차량 등록 |");
                             System.out.println(" --------------");
@@ -253,6 +256,8 @@ public class mainpage {
                     System.out.println("알맞는 서비스 번호를 입력해주세요.");
                 }
             }
-        }catch (Exception e){ System.out.println("알맞지 않은 입력입니다."); }
+        }catch (Exception e){
+            System.out.println(e);
+            System.out.println("알맞지 않은 입력입니다."); }
     }
 }
