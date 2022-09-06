@@ -2,9 +2,11 @@ package rentCar.view;
 
 import rentCar.controller.CarController;
 import rentCar.controller.MemberController;
+import rentCar.controller.RentalController;
 import rentCar.model.Dto.CarDto;
 import rentCar.model.Dto.LoginDto;
 import rentCar.model.Dto.MemberDto;
+import rentCar.model.Dto.RentalDto;
 
 import java.util.Scanner;
 
@@ -13,6 +15,7 @@ public class mainpage {
     public static Scanner scanner = new Scanner(System.in);
     public static MemberController memberController = new MemberController();
     public static CarController carController = new CarController();
+    public static RentalController rentalController = new RentalController();
     public static LoginDto logindto = new LoginDto();
     public static void main(String[] args) {
 
@@ -97,7 +100,22 @@ public class mainpage {
                                             System.out.println(" --------");
                                             System.out.println("| 렌탈대여 |");
                                             System.out.println(" --------");
-                                            //구현해야함~~~~~~~~~~~~~~~~~~~~~~~~!!!!!!!
+
+                                            System.out.print("대여 시작일을 입력하세요 (예시.2022-01-01): ");
+                                            String inputStartDay = scanner.next();
+                                            System.out.print("대여 기간을 입력하세요 (예시.7): ");
+                                            String inputPeriod = scanner.next();
+                                            String inputCarNum = scanner.nextLine();        //Scanner 씹힘 방지를 위함
+                                            System.out.print("차량 번호를 입력하세요 (예시.00아 2222): ");
+                                            inputCarNum = scanner.nextLine();
+                                            //일단 결제와 보험은 임의의 값으로 입력
+                                            //System.out.print("연료를 입력하세요 (예시.LPG): ");
+                                            //String inputPaymentNum = scanner.next();
+                                            //System.out.print("차량 옵션을 입력하세요 (예시.에어백): ");
+                                            //String inputInsuranceNum = scanner.next();
+                                            RentalDto rental = new RentalDto(inputStartDay,inputPeriod,logindto.getId(),inputCarNum,"00001","00000004");
+
+                                            rentalController.rental(rental);
                                             break;
                                         case 2:
                                             System.out.printf("2. 선택");
@@ -117,8 +135,12 @@ public class mainpage {
                                     System.out.printf("로그아웃하시겠습니까? [Y][N] ");
                                     String answer = scanner.next();
                                     if(answer.equals("Y") || answer.equals("y")) {
-                                        System.out.printf("정상적으로 로그아웃되었습니다. 안녕히가십시오.");
+                                        System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.\n");
                                         logindto.setId(null);       //로그인 정보 담고 있는 logindto를 null로 만듦
+                                    } else if (answer.equals("N") || answer.equals("n")) {
+                                        System.out.println("로그아웃을 취소했습니다. 메인으로 돌아갑니다.");
+                                    }else{
+                                        System.out.println("알맞지 않은 입력입니다.");
                                     }
                                 }
 
@@ -172,46 +194,61 @@ public class mainpage {
                     }
 
                 } else if (inputServiceNum1 == 2) {  //관리자 선택 시
-                    System.out.print("관리자 아이디를 입력하세요: ");
-                    String masterID = scanner.next();
-                    System.out.print("비밀번호를 입력하세요: ");
-                    String masterPW = scanner.next();
-                    //관리자 계정 로그인 성공
-                    if(masterID.equals("admin") && masterPW.equals("1234")){
-                        System.out.println("관리자님 환영합니다. 렌탈 차량 등록을 시작합니다.");
-                        logindto.setId("admin");        //로그인 유지를 위한 set
-                        System.out.println(" --------------");
-                        System.out.println("| 렌탈 차량 등록 |");
-                        System.out.println(" --------------");
+                    //로그인한 아이디가 있을 경우
+                    if(!logindto.getId().equals(null)){
+                        System.out.println("로그인한 사람이 있습니다. 로그아웃해주세요.");
+                        System.out.printf("로그아웃하시겠습니까? [Y][N] ");
+                        String answer = scanner.next();
+                        if(answer.equals("Y") || answer.equals("y")) {
+                            System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.\n");
+                            logindto.setId(null);       //로그인 정보 담고 있는 logindto를 null로 만듦
+                        } else if (answer.equals("N") || answer.equals("n")) {
+                            System.out.println("로그아웃을 취소했습니다. 메인으로 돌아갑니다.");
+                        }else{
+                            System.out.println("알맞지 않은 입력입니다.");
+                        }
+                    }else {             //로그인한 아이디가 없을 경우
+                        System.out.print("관리자 아이디를 입력하세요: ");
+                        String masterID = scanner.next();
+                        System.out.print("비밀번호를 입력하세요: ");
+                        String masterPW = scanner.next();
+                        //관리자 계정 로그인 성공
+                        if (masterID.equals("admin") && masterPW.equals("1234")) {
+                            System.out.println("관리자님 환영합니다. 렌탈 차량 등록을 시작합니다.");
+                            logindto.setId("admin");        //로그인 유지를 위한 set
+                            System.out.println(" --------------");
+                            System.out.println("| 렌탈 차량 등록 |");
+                            System.out.println(" --------------");
 
-                        String inputCarNum = scanner.nextLine();        //scanner 씹힘 방지
-                        System.out.print("차량 번호를 입력하세요 (예시.00아 2222): ");
-                        inputCarNum = scanner.nextLine();
-                        System.out.print("렌트카 이름을 입력하세요 (예시.k7): ");
-                        String inputCarName = scanner.next();
-                        System.out.print("차 종류를 입력하세요 (예시.대형): ");
-                        String inputCarType = scanner.next();
-                        System.out.print("색상을 입력하세요 (예시.그레이): ");
-                        String inputCarColor = scanner.next();
-                        System.out.print("연료를 입력하세요 (예시.LPG): ");
-                        String inputcarFuel = scanner.next();
-                        System.out.print("차량 옵션을 입력하세요 (예시.에어백): ");
-                        String inputCarOption = scanner.next();
-                        System.out.print("승차 인원수를 입력하세요 (예시.5): ");
-                        int inputCarPersonnel = scanner.nextInt();
-                        System.out.print("지역을 입력하세요 (예시.서울): ");
-                        String inputCarRegion = scanner.next();
-                        System.out.print("상세정보를 입력하세요 : ");
-                        String inputCarDetail = scanner.next();
-                        System.out.print("일일 대여 비용을 입력하세요 (예시.80000): ");
-                        int inputCost = scanner.nextInt();
+                            String inputCarNum = scanner.nextLine();        //scanner 씹힘 방지
+                            System.out.print("차량 번호를 입력하세요 (예시.00아 2222): ");
+                            inputCarNum = scanner.nextLine();
+                            System.out.print("렌트카 이름을 입력하세요 (예시.k7): ");
+                            String inputCarName = scanner.next();
+                            System.out.print("차 종류를 입력하세요 (예시.대형): ");
+                            String inputCarType = scanner.next();
+                            System.out.print("색상을 입력하세요 (예시.그레이): ");
+                            String inputCarColor = scanner.next();
+                            System.out.print("연료를 입력하세요 (예시.LPG): ");
+                            String inputcarFuel = scanner.next();
+                            System.out.print("차량 옵션을 입력하세요 (예시.에어백): ");
+                            String inputCarOption = scanner.next();
+                            System.out.print("승차 인원수를 입력하세요 (예시.5): ");
+                            int inputCarPersonnel = scanner.nextInt();
+                            System.out.print("지역을 입력하세요 (예시.서울): ");
+                            String inputCarRegion = scanner.next();
+                            System.out.print("상세정보를 입력하세요 : ");
+                            String inputCarDetail = scanner.next();
+                            System.out.print("일일 대여 비용을 입력하세요 (예시.80000): ");
+                            int inputCost = scanner.nextInt();
 
-                        CarDto car = new CarDto(inputCarNum,inputCarName,inputCarType,inputCarColor,inputcarFuel,inputCarOption,inputCarPersonnel,inputCarRegion,inputCarDetail,inputCost);
-                        carController.resisterCar(car);
-                    }else{
-                        System.out.println("관리자 계정 정보가 잘못되었습니다.");
+                            CarDto car = new CarDto(inputCarNum, inputCarName, inputCarType, inputCarColor, inputcarFuel, inputCarOption, inputCarPersonnel, inputCarRegion, inputCarDetail, inputCost);
+                            carController.resisterCar(car);
+                        } else {
+                            System.out.println("관리자 계정 정보가 잘못되었습니다.");
+                        }
+                        System.out.println("main) 끝남\n");
                     }
-                    System.out.println("main) 끝남\n");
                 } else {
                     System.out.println("알맞는 서비스 번호를 입력해주세요.");
                 }

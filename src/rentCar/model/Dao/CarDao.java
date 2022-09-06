@@ -46,7 +46,7 @@ public class CarDao {
         return false;
     }
 
-    //1. 고객 회원가입 메소드
+    //1. 차량 등록 메소드
     public boolean resisterCar(CarDto car) {
         String sql = "INSERT INTO `차량` VALUES (?,?,?,?,?,?,?,?,?,?)";
         try {
