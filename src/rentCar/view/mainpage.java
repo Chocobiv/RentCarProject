@@ -65,6 +65,39 @@ public class mainpage {
         }
     }
 
+    public static void logindedMaster(){
+        System.out.println("관리자님 환영합니다. 렌탈 차량 등록을 시작합니다.");
+        LoginDto.setId("admin");        //로그인 유지를 위한 set
+        System.out.println(" --------------");
+        System.out.println("| 렌탈 차량 등록 |");
+        System.out.println(" --------------");
+
+        String inputCarNum = scanner.nextLine();        //scanner 씹힘 방지
+        System.out.print("차량 번호를 입력하세요 (예시.00아 2222): ");
+        inputCarNum = scanner.nextLine();
+        System.out.print("렌트카 이름을 입력하세요 (예시.k7): ");
+        String inputCarName = scanner.next();
+        System.out.print("차 종류를 입력하세요 (예시.대형): ");
+        String inputCarType = scanner.next();
+        System.out.print("색상을 입력하세요 (예시.그레이): ");
+        String inputCarColor = scanner.next();
+        System.out.print("연료를 입력하세요 (예시.LPG): ");
+        String inputcarFuel = scanner.next();
+        System.out.print("차량 옵션을 입력하세요 (예시.에어백): ");
+        String inputCarOption = scanner.next();
+        System.out.print("승차 인원수를 입력하세요 (예시.5): ");
+        int inputCarPersonnel = scanner.nextInt();
+        System.out.print("지역을 입력하세요 (예시.서울): ");
+        String inputCarRegion = scanner.next();
+        System.out.print("상세정보를 입력하세요 : ");
+        String inputCarDetail = scanner.next();
+        System.out.print("일일 대여 비용을 입력하세요 (예시.80000): ");
+        int inputCost = scanner.nextInt();
+
+        CarDto car = new CarDto(inputCarNum, inputCarName, inputCarType, inputCarColor, inputcarFuel, inputCarOption, inputCarPersonnel, inputCarRegion, inputCarDetail, inputCost);
+        carController.resisterCar(car);
+    }
+
     //로그아웃 메소드
     public static int logout(){
         int result = 0;
@@ -76,7 +109,10 @@ public class mainpage {
             LoginDto.setId(null);       //로그인 정보 담고 있는 logindto를 null로 만듦
         } else if (answer.equals("N") || answer.equals("n")) {
             System.out.println("로그아웃을 취소했습니다. 현재 계정의 로그인 상태를 유지합니다.");
-            result = 1;                 //로그인 상태 유지
+            if(logindto.getId().equals("admin"))
+                result = 2;             //로그인 상태 유지 - 관리자 계정
+            else
+                result = 1;                 //로그인 상태 유지 - 일반사용자 계정
         }else{
             System.out.println("알맞지 않은 입력입니다.");
         }
@@ -165,8 +201,11 @@ public class mainpage {
                                 }
                             }else {                         //로그인한 사람이 있으면
                                 int session = logout();
-                                if(session==1)
+                                if(session==1)              //일반사용자 계정
                                     logindedMember();
+                                else if (session==2) {      //관리자 계정
+                                    logindedMaster();
+                                }
                             }
                             break;
 
@@ -226,47 +265,17 @@ public class mainpage {
                         String masterPW = scanner.next();
                         //관리자 계정 로그인 성공
                         if (masterID.equals("admin") && masterPW.equals("1234")) {
-                            System.out.println("관리자님 환영합니다. 렌탈 차량 등록을 시작합니다.");
-                            LoginDto.setId("admin");        //로그인 유지를 위한 set
-                            System.out.println(" --------------");
-                            System.out.println("| 렌탈 차량 등록 |");
-                            System.out.println(" --------------");
-
-                            String inputCarNum = scanner.nextLine();        //scanner 씹힘 방지
-                            System.out.print("차량 번호를 입력하세요 (예시.00아 2222): ");
-                            inputCarNum = scanner.nextLine();
-                            System.out.print("렌트카 이름을 입력하세요 (예시.k7): ");
-                            String inputCarName = scanner.next();
-                            System.out.print("차 종류를 입력하세요 (예시.대형): ");
-                            String inputCarType = scanner.next();
-                            System.out.print("색상을 입력하세요 (예시.그레이): ");
-                            String inputCarColor = scanner.next();
-                            System.out.print("연료를 입력하세요 (예시.LPG): ");
-                            String inputcarFuel = scanner.next();
-                            System.out.print("차량 옵션을 입력하세요 (예시.에어백): ");
-                            String inputCarOption = scanner.next();
-                            System.out.print("승차 인원수를 입력하세요 (예시.5): ");
-                            int inputCarPersonnel = scanner.nextInt();
-                            System.out.print("지역을 입력하세요 (예시.서울): ");
-                            String inputCarRegion = scanner.next();
-                            System.out.print("상세정보를 입력하세요 : ");
-                            String inputCarDetail = scanner.next();
-                            System.out.print("일일 대여 비용을 입력하세요 (예시.80000): ");
-                            int inputCost = scanner.nextInt();
-
-                            CarDto car = new CarDto(inputCarNum, inputCarName, inputCarType, inputCarColor, inputcarFuel, inputCarOption, inputCarPersonnel, inputCarRegion, inputCarDetail, inputCost);
-                            carController.resisterCar(car);
+                            logindedMaster();
                         } else {
                             System.out.println("관리자 계정 정보가 잘못되었습니다.");
                         }
-                        System.out.println("main) 끝남\n");
                     }
                 } else {
                     System.out.println("알맞는 서비스 번호를 입력해주세요.");
                 }
             }
         }catch (Exception e){
-            System.out.println(e);
+            //System.out.println(e);
             System.out.println("알맞지 않은 입력입니다."); }
     }
 }
