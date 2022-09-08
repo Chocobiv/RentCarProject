@@ -32,7 +32,7 @@ public class mainpage {
         System.out.print("차량 번호를 입력하세요 (예시.00아 2222): ");
         inputCarNum = scanner.nextLine();
         //일단 결제와 보험은 임의의 값으로 입력
-        //System.out.print("결제 번호를 입력하세요 (예시.LPG): ");
+        //System.out.print("결제 번호를 입력하세요 (예시.LPG): ");      //결제번호 구현시, 결제테이블에 있는지 여부 체크와 중복체크해야함!
         //String inputPaymentNum = scanner.next();
         //System.out.print("보험 번호를 입력하세요 (예시.에어백): ");
         //String inputInsuranceNum = scanner.next();
@@ -65,6 +65,7 @@ public class mainpage {
         }
     }
 
+    //로그인한 관리자 계정
     public static void logindedMaster(){
         System.out.println("관리자님 환영합니다. 렌탈 차량 등록을 시작합니다.");
         LoginDto.setId("admin");        //로그인 유지를 위한 set
@@ -94,7 +95,7 @@ public class mainpage {
         System.out.print("일일 대여 비용을 입력하세요 (예시.80000): ");
         int inputCost = scanner.nextInt();
 
-        CarDto car = new CarDto(inputCarNum, inputCarName, inputCarType, inputCarColor, inputcarFuel, inputCarOption, inputCarPersonnel, inputCarRegion, inputCarDetail, inputCost);
+        CarDto car = new CarDto(inputCarNum, inputCarName, inputCarType, inputCarColor, inputcarFuel, inputCarOption, inputCarPersonnel, inputCarRegion, inputCarDetail, inputCost, "대여가능");
         carController.resisterCar(car);
     }
 

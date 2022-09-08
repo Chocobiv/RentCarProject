@@ -48,7 +48,7 @@ public class CarDao {
 
     //1. 차량 등록 메소드
     public boolean resisterCar(CarDto car) {
-        String sql = "INSERT INTO `차량` VALUES (?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO `차량` VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         try {
             ps = con.prepareStatement(sql);
 
@@ -57,6 +57,7 @@ public class CarDao {
             ps.setString( 5 , car.getCarFuel() ); 	ps.setString( 6 , car.getCarOption());
             ps.setInt( 7 , car.getCarPersonnel() ); 	ps.setString( 8 , car.getCarRegion());
             ps.setString( 9 , car.getCarDetail() ); 	ps.setInt( 10 , car.getCost());
+            ps.setString( 11 , car.getCarReturn());
 
             ps.executeUpdate();
             return true;

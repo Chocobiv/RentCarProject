@@ -12,11 +12,12 @@ public class CarDto {
     private String carRegion;       //지역
     private String carDetail;       //상세정보
     private int cost;               //일일대여비용
+    private String carReturn;       //차량반납여부
 
     //2. 생성자
     public CarDto() {}
 
-    public CarDto(String carNum, String carName, String carType, String carColor, String carFuel, String carOption, int carPersonnel, String carRegion, String carDetail, int cost) {
+    public CarDto(String carNum, String carName, String carType, String carColor, String carFuel, String carOption, int carPersonnel, String carRegion, String carDetail, int cost, String carReturn) {
         this.carNum = carNum;
         this.carName = carName;
         this.carType = carType;
@@ -27,9 +28,10 @@ public class CarDto {
         this.carRegion = carRegion;
         this.carDetail = carDetail;
         this.cost = cost;
+        this.carReturn = carReturn;
     }
 
-//3. 메소드
+    //3. 메소드
 
     public String getCarNum() {
         return carNum;
@@ -109,5 +111,13 @@ public class CarDto {
 
     public void setCost(int cost) {
         this.cost = cost;
+    }
+
+    public String getCarReturn() {
+        return carReturn;
+    }
+
+    public void setCarReturn(String carReturn) {
+        this.carReturn = carReturn;
     }
 }

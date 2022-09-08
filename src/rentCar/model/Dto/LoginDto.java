@@ -3,7 +3,7 @@ package rentCar.model.Dto;
 import rentCar.model.Dao.CarDao;
 
 public class LoginDto {
-    public static String id;
+    public static String id;        //static : 보안 처리 필요
 
     //로그인 유지를 위한 LoginDto
     //3. 객체 생성
