@@ -29,14 +29,21 @@ public class RentalDao {
     //렌탈대여 메소드
     public boolean rentalCar(RentalDto rental){
         String sql = "INSERT INTO `대여`(대여시작일,대여기간,운전면허증번호,차량번호,결제번호,보험등록번호,대여상태) VALUES (?,?,?,?,?,?,?)";
+        String sql2 ="UPDATE 차량 SET 차량반납여부=? WHERE 차량번호=?"; //대여하는 차량의 차량반납여부를 대여중으로 변경
         try {
             ps = con.prepareStatement(sql);
 
             ps.setString( 1 , rental.getRentalStartDay() ); 	ps.setString( 2 , rental.getRentalPeriod() );
             ps.setString( 3 , rental.getDriverNum() );	ps.setString( 4 , rental.getCarNum() );
             ps.setString( 5 , rental.getPaymentNum() ); 	ps.setString( 6 , rental.getInsuranceNum());
-            ps.setString( 6 , "대여중");
+            ps.setString( 7 , "대여중");
 
+            ps.executeUpdate();
+
+
+            ps = con.prepareStatement(sql2);
+            ps.setString( 1 , "대여중" );
+            ps.setString( 2 , rental.getCarNum() );
             ps.executeUpdate();
             return true;
         }
@@ -59,5 +66,23 @@ public class RentalDao {
         
         // 동일한 차량번호가 존재하지 않으면
         return false;
+    }
+
+    //차량번호를 이용해서 차량테이블에서 차량반납여부 가져오는 메소드
+    public String checkedRentalState( String carNum ){
+        String sql = "select 차량반납여부 from 차량 where 차량번호 = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1,carNum );
+            rs = ps.executeQuery();
+
+            if( rs.next() ) {
+                //DB에서 차량번호로 검색된 레코드
+                String getRentalState = rs.getString(1);
+                return getRentalState;  //해당 차량번호의 차량반납여부 반환
+            }
+        }catch (Exception e) { System.out.println( e );}
+
+        return null;
     }
 }
