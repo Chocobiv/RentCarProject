@@ -144,39 +144,47 @@ public class mainpage {
 
                     switch (inputServiceNum2) {
                         case 1:         //회원가입(데이터 저장)
-                            System.out.println(" ---------");
-                            System.out.println("| 회원가입 |");
-                            System.out.println(" ---------");
+                            if(logindto.getId()==null) {        //로그인한 사람이 없으면
+                                System.out.println(" ---------");
+                                System.out.println("| 회원가입 |");
+                                System.out.println(" ---------");
 
-                            //개행문자 제거 - 운전면허증번호 입력을 안받고 넘어가는 문제 발생 -> 해결
-                            scanner.nextLine();
+                                //개행문자 제거 - 운전면허증번호 입력을 안받고 넘어가는 문제 발생 -> 해결
+                                scanner.nextLine();
 
-                            //비밀번호 확인도 해야함 -> controller에서 (근데 DB에 비밀번호가 없음!)
-                            System.out.print("운전면허증번호를 입력하세요 (예시.12-12-123456-12): ");
-                            String inputDriveNum = scanner.next();
-                            System.out.print("취득날짜를 입력하세요 (예시.2022-01-01): ");
-                            String inputDriveDate = scanner.next();
-                            System.out.print("생년월일을 입력하세요 (예시.2022-01-01): ");
-                            String inputBirth = scanner.next();
-                            System.out.print("고객명을 입력하세요 (예시.홍길동): ");
-                            String inputName = scanner.next();
-                            System.out.print("나이를 입력하세요 (예시.20): ");
-                            int inputAge = scanner.nextInt();
-                            System.out.print("주소를 입력하세요 (예시.인천): ");
-                            String inputAddr = scanner.next();
-                            System.out.print("전화번호를 입력하세요 (예시.010-1234-1234): ");
-                            String inputPhoneNum = scanner.next();
-                            System.out.print("이메일을 입력하세요 (예시.abc@abc.com): ");
-                            String inputEmail = scanner.next();
-                            //비밀번호 확인
-                            System.out.print("비밀번호 확인 (전화번호 뒷자리): ");
-                            String checkPW = scanner.next();
+                                //비밀번호 확인도 해야함 -> controller에서 (근데 DB에 비밀번호가 없음!)
+                                System.out.print("운전면허증번호를 입력하세요 (예시.12-12-123456-12): ");
+                                String inputDriveNum = scanner.next();
+                                System.out.print("취득날짜를 입력하세요 (예시.2022-01-01): ");
+                                String inputDriveDate = scanner.next();
+                                System.out.print("생년월일을 입력하세요 (예시.2022-01-01): ");
+                                String inputBirth = scanner.next();
+                                System.out.print("고객명을 입력하세요 (예시.홍길동): ");
+                                String inputName = scanner.next();
+                                System.out.print("나이를 입력하세요 (예시.20): ");
+                                int inputAge = scanner.nextInt();
+                                System.out.print("주소를 입력하세요 (예시.인천): ");
+                                String inputAddr = scanner.next();
+                                System.out.print("전화번호를 입력하세요 (예시.010-1234-1234): ");
+                                String inputPhoneNum = scanner.next();
+                                System.out.print("이메일을 입력하세요 (예시.abc@abc.com): ");
+                                String inputEmail = scanner.next();
+                                //비밀번호 확인
+                                System.out.print("비밀번호 확인 (전화번호 뒷자리): ");
+                                String checkPW = scanner.next();
 
-                            MemberDto member = new MemberDto(inputDriveNum, inputDriveDate, inputBirth, inputName, inputAge, inputAddr, inputPhoneNum, inputEmail);
+                                MemberDto member = new MemberDto(inputDriveNum, inputDriveDate, inputBirth, inputName, inputAge, inputAddr, inputPhoneNum, inputEmail);
 
-                            //* 유효성 검사 - Controller에서 *//
-                            memberController.signup(member, checkPW);
-
+                                //* 유효성 검사 - Controller에서 *//
+                                memberController.signup(member, checkPW);
+                            }else {                         //로그인한 사람이 있으면
+                                int session = logout();
+                                if(session==1)              //일반사용자 계정
+                                    logindedMember();
+                                else if (session==2) {      //관리자 계정
+                                    logindedMaster();
+                                }
+                            }
                             break;
                         case 2:         //로그인
                             if(logindto.getId()==null) {        //로그인한 사람이 없으면
@@ -217,9 +225,9 @@ public class mainpage {
 
                             //고객명, 전화번호 이용
                             System.out.print("성함을 입력하세요 : ");
-                            inputName = scanner.next();
+                            String inputName = scanner.next();
                             System.out.print("가입시 입력한 전화번호를 입력하세요 (예시.010-1234-1234): ");
-                            inputPhoneNum = scanner.next();
+                            String inputPhoneNum = scanner.next();
 
                             //정상적으로 아이디(운전면허증번호)를 찾았을 경우 운전면허증번호를 반환
                             String getDriveNum = memberController.findDriveNum(inputName, inputPhoneNum);
@@ -239,7 +247,7 @@ public class mainpage {
                             System.out.print("ID(운전면허증번호)를 입력하세요 : ");
                             inputName = scanner.next();
                             System.out.print("가입시 입력한 이메일을 입력하세요 (예시.abc@abc.com): ");
-                            inputEmail = scanner.next();
+                            String inputEmail = scanner.next();
 
                             //정상적으로 비밀번호(전화번호 뒷자리)를 찾았을 경우 비밀번호를 반환
                             String getPW = memberController.findPassword(inputName, inputEmail);

@@ -28,13 +28,14 @@ public class RentalDao {
 
     //렌탈대여 메소드
     public boolean rentalCar(RentalDto rental){
-        String sql = "INSERT INTO `대여`(대여시작일,대여기간,운전면허증번호,차량번호,결제번호,보험등록번호) VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO `대여`(대여시작일,대여기간,운전면허증번호,차량번호,결제번호,보험등록번호,대여상태) VALUES (?,?,?,?,?,?,?)";
         try {
             ps = con.prepareStatement(sql);
 
             ps.setString( 1 , rental.getRentalStartDay() ); 	ps.setString( 2 , rental.getRentalPeriod() );
             ps.setString( 3 , rental.getDriverNum() );	ps.setString( 4 , rental.getCarNum() );
             ps.setString( 5 , rental.getPaymentNum() ); 	ps.setString( 6 , rental.getInsuranceNum());
+            ps.setString( 6 , "대여중");
 
             ps.executeUpdate();
             return true;
