@@ -6,6 +6,7 @@ import rentCar.model.Dao.RentalDao;
 import rentCar.model.Dto.CarDto;
 import rentCar.model.Dto.RentalDto;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,12 +22,25 @@ public class RentalController {
         if(carList!=null){
             return carList;
         }else{
-            System.out.printf("렌탈 대여 가능한 차량이 없습니다.\n");
+            System.out.println("렌탈 대여 가능한 차량이 없습니다.\n");
         }
         return null;
     }
 
+    //렌탈대여 중인 차량 목록 조회 메소드
+    public ArrayList<String> rentalCarList(String id){
+        //대여 중인 차량 리스트를 가져옴
+        ArrayList<String> carNumList = RentalDao.getRentalDao().rentalCarNum(id);
 
+        if(carNumList!=null){
+            return carNumList;
+        }else{
+            System.out.println("현재 렌탈 중인 차량이 없습니다.\n");
+        }
+        return null;
+    }
+
+    //렌탈대여 메소드
     public boolean rental(RentalDto rental){
         boolean result = false;
 
@@ -83,4 +97,24 @@ public class RentalController {
         return result;
     }
 
+    //렌탈반납 메소드
+    public void returnCar(String id, String carNum){
+        boolean result = RentalDao.getRentalDao().returnCar(id,carNum);
+        if(result){
+            System.out.println("렌탈반납에 성공했습니다.\n");
+        }else {
+            System.out.println("안내) 렌탈반납 실패\n");
+        }
+    }
+
+    //렌탈현황 조회 메소드
+    public ArrayList<RentalDto> rentalStatus(){
+        ArrayList<RentalDto> rentalList = RentalDao.getRentalDao().rentalStatusList();
+        if(rentalList!=null){
+            return rentalList;
+        }else {
+            System.out.println("대여 중인 차량이 없습니다.\n");
+        }
+        return null;
+    }
 }

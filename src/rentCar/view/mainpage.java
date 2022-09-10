@@ -19,12 +19,13 @@ public class mainpage {
     public static RentalController rentalController = new RentalController();
     public static LoginDto logindto = new LoginDto();
 
-    //렌탈 대여 가능한 차량 목록 메소드
+    //렌탈 대여 가능한 차량 목록 메소드 - 일반사용자 메뉴
     public static void rentalList(){
         System.out.println(" --------------");
         System.out.println("| 렌탈 가능 목록 |");
         System.out.println(" --------------");
 
+        //대여 가능한 차량 리스트
         ArrayList<CarDto> carList = rentalController.rentalList();
 
         System.out.println(" ===============================================================================");
@@ -35,9 +36,45 @@ public class mainpage {
                     car.getCarNum(),car.getCarName(),car.getCarType(),car.getCarColor(),
                     car.getCarFuel(),car.getCarOption(),car.getCarPersonnel(),car.getCarDetail(),car.getCost());
         }
+
+
     }
 
-    //렌탈대여 메소드
+    //렌탈 중인 차량 목록 - 일반 사용자 메뉴
+    public static boolean rentalCarList(){
+        System.out.println(" --------------");
+        System.out.println("| 렌탈 중인 차량 |");
+        System.out.println(" --------------");
+
+        ArrayList<String> carList = rentalController.rentalCarList(logindto.getId());
+
+        if(carList!=null) {
+            System.out.println(" ===========");
+            System.out.println("|  차량번호  |");
+            System.out.println(" ===========");
+            for (String car : carList)
+                System.out.printf("| %s |\n", car);
+            System.out.println();
+            return true;
+        }
+        return false;
+    }
+
+    //해당 아이디가 렌트한 차량번호를 입력했는지 여부 확인 메소드 - 일반 사용자 메뉴
+    public static boolean isRentedCar(String inputCarNum){
+        ArrayList<String> carList = rentalController.rentalCarList(logindto.getId());
+        boolean result=false;                //해당 아이디가 렌트한 차량번호를 입력했는지 여부를 확인하는 변수
+        for (String car : carList){
+            if(car.equals(inputCarNum)){     //해당 아이디가 렌트한 차량번호를 입력했으면
+                result = true;
+                return result;
+            }
+        }
+        System.out.println("대여 중인 차량번호를 입력해주세요.\n");
+        return result;
+    }
+
+    //렌탈대여 메소드 - 일반사용자 메뉴
     public static void rentalService(){
         System.out.println(" --------");
         System.out.println("| 렌탈대여 |");
@@ -60,36 +97,8 @@ public class mainpage {
         rentalController.rental(rental);
     }
 
-    //로그인한 일반사용자
-    public static void logindedMember(){
-        System.out.println("\n메뉴 : 1.렌탈대여  2.렌탈반납  3.내 정보  4.로그아웃");
-        System.out.print("선택 : ");
-        int menu = scanner.nextInt();
-        switch (menu){
-            case 1:         //렌탈대여
-                //렌탈 가능한 목록 보여주기
-                rentalList();
-                rentalService();
-                break;
-            case 2:         //렌탈반납
-                System.out.print("2. 선택");
-                break;
-            case 3:         //내 정보
-                System.out.print("3. 선택");
-                break;
-            case 4:         //로그아웃
-                System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.");
-                LoginDto.setId(null);   //로그인 정보 담고 있는 logindto를 null로 만듦
-                break;
-            default:
-                System.out.print("선택할 수 없는 번호입니다.");
-        }
-    }
-
-    //로그인한 관리자 계정
-    public static void logindedMaster(){
-        System.out.println("관리자님 환영합니다. 렌탈 차량 등록을 시작합니다.");
-        LoginDto.setId("admin");        //로그인 유지를 위한 set
+    //렌탈 차량 등록 - 관리자 메뉴
+    public static void registerCar(){
         System.out.println(" --------------");
         System.out.println("| 렌탈 차량 등록 |");
         System.out.println(" --------------");
@@ -120,6 +129,89 @@ public class mainpage {
         carController.resisterCar(car);
     }
 
+    //렌탈 현황 - 관리자 메뉴
+    public static void rentalStatus(){
+        System.out.println(" ----------");
+        System.out.println("| 대여 현황 |");
+        System.out.println(" ----------");
+
+        ArrayList<RentalDto> rentalList = rentalController.rentalStatus();
+        if(rentalList!=null) {
+            System.out.println(" ==========================================================================");
+            System.out.println("|\t운전면허증번호\t|  차량번호  | 대여 시작일 | 대여기간 | 결제번호 | 보험등록번호 |");
+            System.out.println(" ==========================================================================");
+            for (RentalDto rental : rentalList)
+                System.out.printf("| %s | %s | %s | %s | %s | %s |\n", rental.getDriverNum(),rental.getCarNum(),rental.getRentalStartDay(),rental.getRentalPeriod(),rental.getPaymentNum(),rental.getInsuranceNum());
+            System.out.println();
+        }
+    }
+
+    //로그인한 일반사용자
+    public static void logindedMember(){
+        System.out.println("\n메뉴 : 1.렌탈대여  2.렌탈반납  3.내 정보  4.로그아웃");
+        System.out.print("선택 : ");
+        int menu = scanner.nextInt();
+        switch (menu){
+            case 1:         //렌탈대여
+                //렌탈 가능한 목록 보여주기
+                rentalList();
+                rentalService();
+                break;
+            case 2:         //렌탈반납
+                try {
+                    boolean existRentCar = rentalCarList();
+
+                    if (existRentCar) {         //해당 아이디로 렌트한 차량이 있으면
+                        String inputCarNum = scanner.nextLine();        //Scanner 씹힘 방지를 위함
+                        System.out.print("차량 번호를 입력하세요 (예시.00아 2222): ");
+                        inputCarNum = scanner.nextLine();
+
+                        boolean isExistCar = isRentedCar(inputCarNum);
+                        if(isExistCar){         //반납할 차량번호가 렌트한 차량이면
+                            System.out.print("렌탈 반납하시겠습니까? [Y][N] ");
+                            String answer = scanner.next();
+                            if (answer.equals("Y") || answer.equals("y"))
+                                rentalController.returnCar(logindto.getId(),inputCarNum);
+                             else if (answer.equals("N") || answer.equals("n"))
+                                System.out.println("렌탈 반납을 취소합니다.\n");
+                             else
+                                System.out.println("알맞지 않은 입력입니다.\n");
+                        }
+                    }
+                }catch (Exception e){ System.out.println(e); }
+
+                break;
+            case 3:         //내 정보
+                System.out.print("3. 선택");
+                break;
+            case 4:         //로그아웃
+                System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.");
+                LoginDto.setId(null);   //로그인 정보 담고 있는 logindto를 null로 만듦
+                break;
+            default:
+                System.out.print("선택할 수 없는 번호입니다.");
+        }
+    }
+
+    //로그인한 관리자 계정
+    public static void logindedMaster(){
+        LoginDto.setId("admin");        //로그인 유지를 위한 set
+        System.out.println("\n관리자님 환영합니다.");
+        System.out.println("1. 차량등록  2. 대여현황  3. 매출현황");
+        int inputServiceNum1 = scanner.nextInt();
+
+        switch (inputServiceNum1) {
+            case 1:         //차량등록
+                registerCar();
+                break;
+            case 2:         //대여현황
+                rentalStatus();
+                break;
+            case 3:         //매출현황
+                break;
+        }
+    }
+
     //로그아웃 메소드
     public static int logout(){
         int result = 0;
@@ -142,16 +234,6 @@ public class mainpage {
     }
     public static void main(String[] args) {
 
-        /*
-        while ( true ){
-            System.out.println("1.등록 2.~~~~~~");
-            int ch = scanner.nextInt();
-            if( ch == 1 ){
-                carController.register();
-            }else{
-                return;
-            }
-        }*/
         try {       //입력 오류 예외처리
             while(true){
                 System.out.println(" ------------------------------------------------------------------");

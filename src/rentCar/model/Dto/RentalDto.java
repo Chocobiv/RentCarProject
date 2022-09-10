@@ -9,6 +9,7 @@ public class RentalDto {
     private String carNum;          //차량번호 (FOREIGN KEY)
     private String paymentNum;      //결제번호 (FOREIGN KEY)
     private String insuranceNum;    //보험등록번호 (FOREIGN KEY)
+    private String rentalStatus;    //대여상태
 
     //생성자
     public RentalDto(){}
@@ -20,6 +21,16 @@ public class RentalDto {
         this.carNum = carNum;
         this.paymentNum = paymentNum;
         this.insuranceNum = insuranceNum;
+    }
+
+    public RentalDto(String rentalStartDay, String rentalPeriod, String driverNum, String carNum, String paymentNum, String insuranceNum, String rentalStatus) {
+        this.rentalStartDay = rentalStartDay;
+        this.rentalPeriod = rentalPeriod;
+        this.driverNum = driverNum;
+        this.carNum = carNum;
+        this.paymentNum = paymentNum;
+        this.insuranceNum = insuranceNum;
+        this.rentalStatus = rentalStatus;
     }
 
     //메소드
@@ -69,5 +80,13 @@ public class RentalDto {
 
     public void setInsuranceNum(String insuranceNum) {
         this.insuranceNum = insuranceNum;
+    }
+
+    public String getRentalStatus() {
+        return rentalStatus;
+    }
+
+    public void setRentalStatus(String rentalStatus) {
+        this.rentalStatus = rentalStatus;
     }
 }

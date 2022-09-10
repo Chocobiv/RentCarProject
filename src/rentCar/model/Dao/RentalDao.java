@@ -27,6 +27,29 @@ public class RentalDao {
     //Dao 객체 반환
     public static RentalDao getRentalDao() { return rentalDao; }
 
+    public ArrayList<RentalDto> rentalStatusList() {
+        //값은 그냥 ?로 하고 ps.set으로 하기!
+        //안되면 mysql에서 sql문 테스트해보기
+        ArrayList<RentalDto> rentalList = new ArrayList<RentalDto>();
+        String sql = "select 대여시작일,대여기간,운전면허증번호,차량번호,결제번호,보험등록번호 from 대여 where 대여상태 = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1,"대여중");
+            rs = ps.executeQuery();
+            // 대여상태가 대여중인게 있으면
+            while( rs.next() ) {        //여러개 호출시 while
+                RentalDto rental = new RentalDto(
+                        rs.getString(1),rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6));
+
+                rentalList.add(rental);
+            }
+            return rentalList;
+        }catch (Exception e) {}
+        //대여상태가 대여중인게 없으면
+        return null;
+    }
+
     //렌탈 대여 가능 목록 조회 메소드
     public ArrayList<CarDto> selectRentalList() {
         //값은 그냥 ?로 하고 ps.set으로 하기!
@@ -80,16 +103,19 @@ public class RentalDao {
     }
 
     //렌탈 중인 차량번호 조회 메소드
-    public String rentalCarNum(String id){
-        String sql = "select 차량번호 from 대여 where 운전면허증번호 = ?";
+    public ArrayList<String> rentalCarNum(String id){
+        String sql = "select 차량번호 from 대여 where 운전면허증번호 = ? AND 대여상태 = ?";
+        ArrayList<String> list = new ArrayList<>();
         try {
             ps = con.prepareStatement(sql);
             ps.setString(1,id );
+            ps.setString(2,"대여중");
             rs = ps.executeQuery();
 
-            if( rs.next() ) {
-                String getRentalCarNum = rs.getString(1);
-                return getRentalCarNum;  //해당 차량번호의 차량반납여부 반환
+            while( rs.next() ) {
+                String carNum = rs.getString(1);
+                list.add(carNum);
+                return list;  //해당 아이디(운전면허증번호)가 빌린 차량번호 list 조회
             }
         }catch (Exception e) { System.out.println( e );}
 
@@ -98,10 +124,22 @@ public class RentalDao {
 
 
     //렌탈반납 메소드
-    public boolean returnCar(String id){
+    public boolean returnCar(String id, String carNum){
         String sql1 ="UPDATE 대여 SET 대여상태=? WHERE 운전면허증번호=?"; //대여테이블의 대여상태를 반납완료로 변경
         String sql2 ="UPDATE 차량 SET 차량반납여부=? WHERE 차량번호=?"; //대여하는 차량의 차량반납여부를 대여가능으로 변경
+        try {
+            ps = con.prepareStatement(sql1);
+            ps.setString(1, "반납완료");
+            ps.setString( 2 , id);
+            ps.executeUpdate();
 
+            ps = con.prepareStatement(sql2);
+            ps.setString(1, "대여가능");
+            ps.setString( 2 , carNum);
+            ps.executeUpdate();
+
+            return true;
+        }catch (Exception e) { System.out.println(e); }
         return false;
     }
 
