@@ -1,11 +1,13 @@
 package rentCar.model.Dao;
 
+import rentCar.model.Dto.CarDto;
 import rentCar.model.Dto.RentalDto;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class RentalDao {
     protected Connection con;
@@ -24,6 +26,32 @@ public class RentalDao {
     public static RentalDao rentalDao = new RentalDao();
     //Dao 객체 반환
     public static RentalDao getRentalDao() { return rentalDao; }
+
+    //렌탈 대여 가능 목록 조회 메소드
+    public ArrayList<CarDto> selectRentalList() {
+        //값은 그냥 ?로 하고 ps.set으로 하기!
+        //안되면 mysql에서 sql문 테스트해보기
+        ArrayList<CarDto> carList = new ArrayList<CarDto>();
+        String sql = "select * from 차량 where 차량반납여부 = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1,"대여가능");
+            rs = ps.executeQuery();
+            // 차량반납여부가 대여가능인게 있으면
+            while( rs.next() ) {        //여러개 호출시 while
+                CarDto car = new CarDto(
+                        rs.getString(1),rs.getString(2),rs.getString(3),
+                        rs.getString(4),rs.getString(5),rs.getString(6),
+                        rs.getInt(7),rs.getString(8),rs.getString(9),
+                        rs.getInt(10),rs.getString(11));
+
+                carList.add(car);
+            }
+            return carList;
+        }catch (Exception e) {}
+        //차량반납여부가 대여가능인게 없으면
+        return null;
+    }
 
 
     //렌탈대여 메소드
@@ -48,6 +76,32 @@ public class RentalDao {
             return true;
         }
         catch (Exception e) { System.out.println(e); }
+        return false;
+    }
+
+    //렌탈 중인 차량번호 조회 메소드
+    public String rentalCarNum(String id){
+        String sql = "select 차량번호 from 대여 where 운전면허증번호 = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1,id );
+            rs = ps.executeQuery();
+
+            if( rs.next() ) {
+                String getRentalCarNum = rs.getString(1);
+                return getRentalCarNum;  //해당 차량번호의 차량반납여부 반환
+            }
+        }catch (Exception e) { System.out.println( e );}
+
+        return null;
+    }
+
+
+    //렌탈반납 메소드
+    public boolean returnCar(String id){
+        String sql1 ="UPDATE 대여 SET 대여상태=? WHERE 운전면허증번호=?"; //대여테이블의 대여상태를 반납완료로 변경
+        String sql2 ="UPDATE 차량 SET 차량반납여부=? WHERE 차량번호=?"; //대여하는 차량의 차량반납여부를 대여가능으로 변경
+
         return false;
     }
 

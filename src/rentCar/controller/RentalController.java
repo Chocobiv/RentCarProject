@@ -3,13 +3,29 @@ package rentCar.controller;
 import rentCar.model.Dao.CarDao;
 import rentCar.model.Dao.MemberDao;
 import rentCar.model.Dao.RentalDao;
+import rentCar.model.Dto.CarDto;
 import rentCar.model.Dto.RentalDto;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class RentalController {
+
+    //렌탈 가능한 차량 목록 조회 메소드
+    public ArrayList<CarDto> rentalList(){
+        //대여가능인 차량 리스트를 가져옴
+        ArrayList<CarDto> carList = RentalDao.getRentalDao().selectRentalList();
+
+        if(carList!=null){
+            return carList;
+        }else{
+            System.out.printf("렌탈 대여 가능한 차량이 없습니다.\n");
+        }
+        return null;
+    }
+
 
     public boolean rental(RentalDto rental){
         boolean result = false;

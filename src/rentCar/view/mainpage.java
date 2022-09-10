@@ -8,6 +8,7 @@ import rentCar.model.Dto.LoginDto;
 import rentCar.model.Dto.MemberDto;
 import rentCar.model.Dto.RentalDto;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class mainpage {
@@ -17,6 +18,24 @@ public class mainpage {
     public static CarController carController = new CarController();
     public static RentalController rentalController = new RentalController();
     public static LoginDto logindto = new LoginDto();
+
+    //렌탈 대여 가능한 차량 목록 메소드
+    public static void rentalList(){
+        System.out.println(" --------------");
+        System.out.println("| 렌탈 가능 목록 |");
+        System.out.println(" --------------");
+
+        ArrayList<CarDto> carList = rentalController.rentalList();
+
+        System.out.println(" ===============================================================================");
+        System.out.println("|  차량번호  | 이름 | 차종류 | 색상 | 연료 | 차 옵션 | 승차인원수 | 상세정보 | 일일대여비용 |");
+        System.out.println(" ===============================================================================");
+        for(CarDto car : carList){
+            System.out.printf("| %s |%s| %s | %s | %s | %s | %d명\t|\t%s\t|\t%d\t|\n",
+                    car.getCarNum(),car.getCarName(),car.getCarType(),car.getCarColor(),
+                    car.getCarFuel(),car.getCarOption(),car.getCarPersonnel(),car.getCarDetail(),car.getCost());
+        }
+    }
 
     //렌탈대여 메소드
     public static void rentalService(){
@@ -47,16 +66,18 @@ public class mainpage {
         System.out.print("선택 : ");
         int menu = scanner.nextInt();
         switch (menu){
-            case 1:
+            case 1:         //렌탈대여
+                //렌탈 가능한 목록 보여주기
+                rentalList();
                 rentalService();
                 break;
-            case 2:
+            case 2:         //렌탈반납
                 System.out.print("2. 선택");
                 break;
-            case 3:
+            case 3:         //내 정보
                 System.out.print("3. 선택");
                 break;
-            case 4:
+            case 4:         //로그아웃
                 System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.");
                 LoginDto.setId(null);   //로그인 정보 담고 있는 logindto를 null로 만듦
                 break;
