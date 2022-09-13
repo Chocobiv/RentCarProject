@@ -32,7 +32,7 @@ public class RentalController {
         //대여 중인 차량 리스트를 가져옴
         ArrayList<String> carNumList = RentalDao.getRentalDao().rentalCarNum(id);
 
-        if(carNumList!=null){
+        if(!carNumList.isEmpty()){
             return carNumList;
         }else{
             System.out.println("현재 렌탈 중인 차량이 없습니다.\n");
@@ -114,6 +114,17 @@ public class RentalController {
             return rentalList;
         }else {
             System.out.println("대여 중인 차량이 없습니다.\n");
+        }
+        return null;
+    }
+
+    //매출현황 조회 메소드
+    public ArrayList<int[]> sales(){
+        ArrayList<int[]> costs = RentalDao.getRentalDao().sales();
+        if(costs!=null){
+            return costs;
+        }else{
+            System.out.println("현재 매출 내역이 없습니다.\n");
         }
         return null;
     }

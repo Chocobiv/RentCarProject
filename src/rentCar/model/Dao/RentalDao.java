@@ -115,8 +115,8 @@ public class RentalDao {
             while( rs.next() ) {
                 String carNum = rs.getString(1);
                 list.add(carNum);
-                return list;  //해당 아이디(운전면허증번호)가 빌린 차량번호 list 조회
             }
+            return list;  //해당 아이디(운전면허증번호)가 빌린 차량번호 list 조회
         }catch (Exception e) { System.out.println( e );}
 
         return null;
@@ -173,6 +173,27 @@ public class RentalDao {
                 String getRentalState = rs.getString(1);
                 return getRentalState;  //해당 차량번호의 차량반납여부 반환
             }
+        }catch (Exception e) { System.out.println( e );}
+
+        return null;
+    }
+
+    //대여테이블에 대여상태가 반납완료인 것들의 결제번호를 타고 결제테이블로 가서 청구요금와 연장비용을 가져오는 메소드
+    public ArrayList<int[]> sales(){
+        ArrayList<int[]> list = new ArrayList<>();
+        String sql = "select 청구요금,연장비용 from 결제 where 결제번호 = any(select 결제번호 from 대여 where 대여상태 = ?)";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1,"반납완료" );
+            rs = ps.executeQuery();
+
+            while( rs.next() ) {
+                int[] getSales = new int[2];
+                getSales[0] = rs.getInt(1);     //청구요금
+                getSales[1] = rs.getInt(2);     //연장비용
+                list.add(getSales);
+            }
+            return list;
         }catch (Exception e) { System.out.println( e );}
 
         return null;

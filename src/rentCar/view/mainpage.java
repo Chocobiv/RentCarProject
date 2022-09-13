@@ -36,8 +36,6 @@ public class mainpage {
                     car.getCarNum(),car.getCarName(),car.getCarType(),car.getCarColor(),
                     car.getCarFuel(),car.getCarOption(),car.getCarPersonnel(),car.getCarDetail(),car.getCost());
         }
-
-
     }
 
     //렌탈 중인 차량 목록 - 일반 사용자 메뉴
@@ -48,7 +46,7 @@ public class mainpage {
 
         ArrayList<String> carList = rentalController.rentalCarList(logindto.getId());
 
-        if(carList!=null) {
+        if(!carList.isEmpty()) {
             System.out.println(" ===========");
             System.out.println("|  차량번호  |");
             System.out.println(" ===========");
@@ -56,6 +54,9 @@ public class mainpage {
                 System.out.printf("| %s |\n", car);
             System.out.println();
             return true;
+        }
+        else{
+            System.out.println("렌트한 차량이 없습니다.\n");
         }
         return false;
     }
@@ -137,9 +138,9 @@ public class mainpage {
 
         ArrayList<RentalDto> rentalList = rentalController.rentalStatus();
         if(rentalList!=null) {
-            System.out.println(" ==========================================================================");
+            System.out.println(" =======================================================================");
             System.out.println("|\t운전면허증번호\t|  차량번호  | 대여 시작일 | 대여기간 | 결제번호 | 보험등록번호 |");
-            System.out.println(" ==========================================================================");
+            System.out.println(" =======================================================================");
             for (RentalDto rental : rentalList)
                 System.out.printf("| %s | %s | %s | %s | %s | %s |\n", rental.getDriverNum(),rental.getCarNum(),rental.getRentalStartDay(),rental.getRentalPeriod(),rental.getPaymentNum(),rental.getInsuranceNum());
             System.out.println();
@@ -178,11 +179,11 @@ public class mainpage {
                                 System.out.println("알맞지 않은 입력입니다.\n");
                         }
                     }
-                }catch (Exception e){ System.out.println(e); }
+                }catch (Exception e){ }     //해당 아이디로 렌탈 중인 차량이 없을 때
 
                 break;
             case 3:         //내 정보
-                System.out.print("3. 선택");
+                System.out.println("아직 구현 중인 기능입니다.");
                 break;
             case 4:         //로그아웃
                 System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.");
@@ -208,6 +209,26 @@ public class mainpage {
                 rentalStatus();
                 break;
             case 3:         //매출현황
+                //대여테이블에 대여상태가 반납완료인 것들의 결제번호를 타고 결제테이블로 가서 청구요금+연장비용 -> 가시화
+                ArrayList<int[]> saleList = rentalController.sales();
+                int sum;
+                if(saleList!=null){
+                    /*System.out.println(" ==============");
+                    System.out.println("|청구요금|연장비용|");
+                    System.out.println(" ==============");*/
+                    System.out.println(" =========");
+                    System.out.println("| 매출현황 |");
+                    System.out.println(" =========");
+                    for (int[] sale : saleList) {
+                        //System.out.printf("| %d | %d |\n", sale[0], sale[1]);
+                        sum = sale[0] + sale[1];
+                        System.out.print(" "+sum+"\t");
+                        for(int i=0;i<sum/10000;i++)
+                            System.out.print("■");
+                        System.out.println();
+                    }
+                    System.out.println();
+                }
                 break;
         }
     }
@@ -226,7 +247,7 @@ public class mainpage {
             if(logindto.getId().equals("admin"))
                 result = 2;             //로그인 상태 유지 - 관리자 계정
             else
-                result = 1;                 //로그인 상태 유지 - 일반사용자 계정
+                result = 1;             //로그인 상태 유지 - 일반사용자 계정
         }else{
             System.out.println("알맞지 않은 입력입니다.");
         }
@@ -369,14 +390,19 @@ public class mainpage {
                 } else if (inputServiceNum1 == 2) {  //관리자 선택 시
                     //로그인한 아이디가 있을 경우
                     if( LoginDto.getId()!=null ){   //null은 equals가 안됨!!!!!!!!!
-                        logout();
+                        int session = logout();
+                        if(session==1)              //일반사용자 계정
+                            logindedMember();
+                        else if (session==2) {      //관리자 계정
+                            logindedMaster();
+                        }
                     }else {             //로그인한 아이디가 없을 경우
                         System.out.print("관리자 아이디를 입력하세요: ");
                         String masterID = scanner.next();
                         System.out.print("비밀번호를 입력하세요: ");
                         String masterPW = scanner.next();
-                        //관리자 계정 로그인 성공
-                        if (masterID.equals("admin") && masterPW.equals("1234")) {
+
+                        if (masterID.equals("admin") && masterPW.equals("1234")) {          //관리자 계정 로그인 성공
                             logindedMaster();
                         } else {
                             System.out.println("관리자 계정 정보가 잘못되었습니다.");
