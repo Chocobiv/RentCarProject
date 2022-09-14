@@ -189,6 +189,16 @@ public class MemberController {
         return null;
     }
 
+
+    //내 정보
+    public MemberDto getMyInfo(String id){
+        MemberDto member = MemberDao.getmemberDao().getMyInfo(id);
+        if(member!=null){
+            return member;
+        }
+        return null;
+    }
+
     //2. 삭제 서비스
     //3. 수정 서비스 등등등
 

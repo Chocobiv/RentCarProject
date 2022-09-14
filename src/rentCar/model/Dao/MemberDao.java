@@ -126,4 +126,24 @@ public class MemberDao {
         return null;
     }
 
+    //내 정보 메소드 - 일반사용자
+    public MemberDto getMyInfo(String id){
+        String sql = "select * from 고객 where 운전면허증번호 = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1,id );
+            rs = ps.executeQuery();
+            // 동일한 정보가 존재하면
+            if( rs.next() ) {       //동일한 값이 있으면 = 성공
+                //운전면허증번호 가져와서 return
+                MemberDto member = new MemberDto(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getInt(5),rs.getString(6),rs.getString(7),rs.getString(8));
+                return member;     // 검색된 회원정보 반환
+            }
+            return null;        //동일한 값이 없으면 = 실패
+
+        }catch (Exception e) { System.out.println( e );}    //DB error
+        // 동일한 정보가 존재하지 않으면
+        return null;
+    }
+
 }

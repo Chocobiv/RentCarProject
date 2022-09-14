@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class CarDao {
     protected Connection con;
@@ -66,4 +67,36 @@ public class CarDao {
         return false;
     }
 
+    //차량 목록 메소드 - 관리자
+    public ArrayList<CarDto> getCarList(){
+        String sql = "select * from 차량";
+        ArrayList<CarDto> list = new ArrayList<CarDto>();
+        try {
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            // 동일한 정보가 존재하면
+            while( rs.next() ) {       //동일한 값이 있으면 = 성공
+                //차량목록 가져와서 return
+                CarDto car = new CarDto(rs.getString(1),rs.getString(2),rs.getString(3),rs.getString(4),rs.getString(5),rs.getString(6),rs.getInt(7),rs.getString(8),rs.getString(9),rs.getInt(10),rs.getString(11));
+                list.add(car);
+            }
+            return list;     // 검색된 회원정보 list 반환
+        }catch (Exception e) { System.out.println( e );}    //DB error
+        // 동일한 정보가 존재하지 않으면
+        return null;
+    }
+
+    public boolean deleteCar( String carNum ) {
+        //값은 그냥 ?로 하고 ps.set으로 하기!
+        //안되면 mysql에서 sql문 테스트해보기
+        String sql = "delete from 차량 where 차량번호 = ?";
+        try {
+            ps = con.prepareStatement(sql);
+            ps.setString(1,carNum );
+            ps.executeUpdate();
+            return true;
+        }catch (Exception e) { System.out.println( e );}
+        // 동일한 차량번호가 존재하지 않으면
+        return false;
+    }
 }

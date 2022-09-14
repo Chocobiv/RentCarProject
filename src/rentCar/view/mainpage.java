@@ -183,7 +183,20 @@ public class mainpage {
 
                 break;
             case 3:         //내 정보
-                System.out.println("아직 구현 중인 기능입니다.");
+                MemberDto memberInfo = memberController.getMyInfo(logindto.getId());
+                if(memberInfo!=null) {
+                    System.out.println(" ========");
+                    System.out.println("| 내 정보 |");
+                    System.out.println(" ========");
+                    System.out.println("운전면허증 번호:" + memberInfo.getDriveNum());
+                    System.out.println("취득 날짜\t:" + memberInfo.getDriveDate());
+                    System.out.println("생년월일\t\t:" + memberInfo.getBirth());
+                    System.out.println("고객명\t\t:" + memberInfo.getName());
+                    System.out.println("나이\t\t\t:" + memberInfo.getAge());
+                    System.out.println("주소\t\t\t:" + memberInfo.getAddr());
+                    System.out.println("전화번호\t\t:" + memberInfo.getPhoneNum());
+                    System.out.println("이메일\t\t:" + memberInfo.getEmail()+"\n");
+                }
                 break;
             case 4:         //로그아웃
                 System.out.println("정상적으로 로그아웃되었습니다. 안녕히가십시오.");
@@ -198,17 +211,41 @@ public class mainpage {
     public static void logindedMaster(){
         LoginDto.setId("admin");        //로그인 유지를 위한 set
         System.out.println("\n관리자님 환영합니다.");
-        System.out.println("1. 차량등록  2. 대여현황  3. 매출현황");
+        System.out.println("1. 차량등록  2. 차량목록  3. 차량삭제  4. 대여현황  5.매출현황  6. 로그아웃");
         int inputServiceNum1 = scanner.nextInt();
 
         switch (inputServiceNum1) {
             case 1:         //차량등록
                 registerCar();
                 break;
-            case 2:         //대여현황
+            case 2:         //차량목록
+                ArrayList<CarDto> list = carController.getCarList();
+                if(!list.isEmpty()){
+                    System.out.println(" =========");
+                    System.out.println("| 차량목록 |");
+                    System.out.println(" =========");
+
+                    System.out.println(" ===================================================================================================");
+                    System.out.println("| 차량번호 |렌트카 이름| 차 종류 | 색상 | 연료 | 차량옵션 |승차 인원수| 지역 |상세정보|일일 대여 비용|차량 반납 여부|");
+                    System.out.println(" ===================================================================================================");
+
+                    for(CarDto car : list){
+                        System.out.printf("| %s |  %s  | %s | %s | %s |  %s  |  %d명  | %s |   %s   | %d | %s |\n",
+                                car.getCarNum(),car.getCarName(),car.getCarType(),car.getCarColor(),car.getCarFuel(),car.getCarOption(),
+                                car.getCarPersonnel(),car.getCarRegion(),car.getCarDetail(),car.getCost(),car.getCarReturn());
+                    }
+                    System.out.println();
+                }
+                break;
+            case 3:         //차량삭제
+                String delCarNum = scanner.nextLine();
+                System.out.print("삭제할 차량번호 : ");    delCarNum = scanner.nextLine();
+                carController.deleteCar(delCarNum);
+                break;
+            case 4:         //대여현황
                 rentalStatus();
                 break;
-            case 3:         //매출현황
+            case 5:         //매출현황
                 //대여테이블에 대여상태가 반납완료인 것들의 결제번호를 타고 결제테이블로 가서 청구요금+연장비용 -> 가시화
                 ArrayList<int[]> saleList = rentalController.sales();
                 int sum;
@@ -229,6 +266,12 @@ public class mainpage {
                     }
                     System.out.println();
                 }
+                break;
+            case 6:
+                logout();
+                break;
+            default:
+                System.out.print("선택할 수 없는 번호입니다.\n");
                 break;
         }
     }
