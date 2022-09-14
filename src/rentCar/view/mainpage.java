@@ -27,15 +27,16 @@ public class mainpage {
 
         //대여 가능한 차량 리스트
         ArrayList<CarDto> carList = rentalController.rentalList();
-
-        System.out.println(" ===============================================================================");
-        System.out.println("|  차량번호  | 이름 | 차종류 | 색상 | 연료 | 차 옵션 | 승차인원수 | 상세정보 | 일일대여비용 |");
-        System.out.println(" ===============================================================================");
-        for(CarDto car : carList){
-            System.out.printf("| %s |%s| %s | %s | %s | %s | %d명\t|\t%s\t|\t%d\t|\n",
-                    car.getCarNum(),car.getCarName(),car.getCarType(),car.getCarColor(),
-                    car.getCarFuel(),car.getCarOption(),car.getCarPersonnel(),car.getCarDetail(),car.getCost());
-        }
+        if(!carList.isEmpty()) {    //carList가 비어있지 않으면
+            System.out.println(" ===============================================================================");
+            System.out.println("|  차량번호  | 이름 | 차종류 | 색상 | 연료 | 차 옵션 | 승차인원수 | 상세정보 | 일일대여비용 |");
+            System.out.println(" ===============================================================================");
+            for (CarDto car : carList) {
+                System.out.printf("| %s |%s| %s | %s | %s | %s | %d명\t|\t%s\t|\t%d\t|\n",
+                        car.getCarNum(), car.getCarName(), car.getCarType(), car.getCarColor(),
+                        car.getCarFuel(), car.getCarOption(), car.getCarPersonnel(), car.getCarDetail(), car.getCost());
+            }
+        }else System.out.println("렌탈 대여 가능한 차량이 없습니다.\n");
     }
 
     //렌탈 중인 차량 목록 - 일반 사용자 메뉴
@@ -56,7 +57,7 @@ public class mainpage {
             return true;
         }
         else{
-            System.out.println("렌트한 차량이 없습니다.\n");
+            System.out.println("현재 렌탈 중인 차량이 없습니다.\n");
         }
         return false;
     }
@@ -95,7 +96,31 @@ public class mainpage {
         //String inputInsuranceNum = scanner.next();
         RentalDto rental = new RentalDto(inputStartDay,inputPeriod, LoginDto.getId(),inputCarNum,"00001","00000004");
 
-        rentalController.rental(rental);
+        int rentalResult = rentalController.rental(rental);
+        switch (rentalResult){
+            case 1:
+                System.out.println("올바른 날짜 형식이 아닙니다.");
+                break;
+            case 2:
+                System.out.println("올바른 차량번호가 아닙니다. ");
+                break;
+            case 3:
+                System.out.println("해당 차량번호가 조회되지 않습니다. 다른 차량번호를 입력하세요.\n");
+                break;
+            case 4:
+                System.out.println("해당 차량은 현재 대여중입니다. 다른 차량번호를 입력하세요.\n");
+                break;
+            case 5:
+                System.out.println("예시를 참고하여 다시 입력해주세요.");
+                System.out.println("해당 차량번호가 조회되지 않습니다. 다른 차량번호를 입력하세요.\n");
+                break;
+            case 6:
+                System.out.println("렌탈대여에 성공했습니다.\n");
+                break;
+            case 7:
+                System.out.println("안내) 렌탈대여 실패\n");
+                break;
+        }
     }
 
     //렌탈 차량 등록 - 관리자 메뉴
@@ -127,7 +152,21 @@ public class mainpage {
         int inputCost = scanner.nextInt();
 
         CarDto car = new CarDto(inputCarNum, inputCarName, inputCarType, inputCarColor, inputcarFuel, inputCarOption, inputCarPersonnel, inputCarRegion, inputCarDetail, inputCost, "대여가능");
-        carController.resisterCar(car);
+        int registResult = carController.registerCar(car);
+        switch (registResult){
+            case 1:
+                System.out.println("차량 등록에 성공했습니다.");
+                break;
+            case 2:
+                System.out.println("안내) 차량 등록 실패");
+                break;
+            case 3:
+                System.out.println("안내) 이미 있는 차량번호입니다.");
+                break;
+            case 4:
+                System.out.println("올바른 차량번호가 아닙니다. 예시를 참고하여 다시 입력해주세요.");
+                break;
+        }
     }
 
     //렌탈 현황 - 관리자 메뉴
@@ -137,14 +176,14 @@ public class mainpage {
         System.out.println(" ----------");
 
         ArrayList<RentalDto> rentalList = rentalController.rentalStatus();
-        if(rentalList!=null) {
+        if(!rentalList.isEmpty()) {
             System.out.println(" =======================================================================");
             System.out.println("|\t운전면허증번호\t|  차량번호  | 대여 시작일 | 대여기간 | 결제번호 | 보험등록번호 |");
             System.out.println(" =======================================================================");
             for (RentalDto rental : rentalList)
                 System.out.printf("| %s | %s | %s | %s | %s | %s |\n", rental.getDriverNum(),rental.getCarNum(),rental.getRentalStartDay(),rental.getRentalPeriod(),rental.getPaymentNum(),rental.getInsuranceNum());
             System.out.println();
-        }
+        }else System.out.println("대여 중인 차량이 없습니다.\n");
     }
 
     //로그인한 일반사용자
@@ -171,9 +210,13 @@ public class mainpage {
                         if(isExistCar){         //반납할 차량번호가 렌트한 차량이면
                             System.out.print("렌탈 반납하시겠습니까? [Y][N] ");
                             String answer = scanner.next();
-                            if (answer.equals("Y") || answer.equals("y"))
-                                rentalController.returnCar(logindto.getId(),inputCarNum);
-                             else if (answer.equals("N") || answer.equals("n"))
+                            if (answer.equals("Y") || answer.equals("y")) {
+                                boolean returnResult = rentalController.returnCar(logindto.getId(), inputCarNum);
+                                if(returnResult)
+                                    System.out.println("렌탈반납에 성공했습니다.\n");
+                                else
+                                    System.out.println("안내) 렌탈반납 실패\n");
+                            }else if (answer.equals("N") || answer.equals("n"))
                                 System.out.println("렌탈 반납을 취소합니다.\n");
                              else
                                 System.out.println("알맞지 않은 입력입니다.\n");
@@ -235,12 +278,26 @@ public class mainpage {
                                 car.getCarPersonnel(),car.getCarRegion(),car.getCarDetail(),car.getCost(),car.getCarReturn());
                     }
                     System.out.println();
-                }
+                }else System.out.println("등록된 차량이 없습니다.\n");
                 break;
             case 3:         //차량삭제
                 String delCarNum = scanner.nextLine();
                 System.out.print("삭제할 차량번호 : ");    delCarNum = scanner.nextLine();
-                carController.deleteCar(delCarNum);
+                int delResult = carController.deleteCar(delCarNum);
+                switch (delResult){
+                    case 0:
+                        System.out.println("안내) 차량 삭제 실패\n");
+                        break;
+                    case 1:
+                        System.out.println("차량 삭제가 완료되었습니다. 감사합니다.\n");
+                        break;
+                    case 2:
+                        System.out.println("해당 차량번호는 조회되지 않습니다. 다시 확인해주세요.\n");
+                        break;
+                    case 3:
+                        System.out.println("차량번호 형식이 잘못되었습니다. 예시를 참고하여 다시 입력해주세요.\n");
+                        break;
+                }
                 break;
             case 4:         //대여현황
                 rentalStatus();
@@ -249,7 +306,7 @@ public class mainpage {
                 //대여테이블에 대여상태가 반납완료인 것들의 결제번호를 타고 결제테이블로 가서 청구요금+연장비용 -> 가시화
                 ArrayList<int[]> saleList = rentalController.sales();
                 int sum;
-                if(saleList!=null){
+                if(!saleList.isEmpty()){
                     /*System.out.println(" ==============");
                     System.out.println("|청구요금|연장비용|");
                     System.out.println(" ==============");*/
@@ -265,7 +322,7 @@ public class mainpage {
                         System.out.println();
                     }
                     System.out.println();
-                }
+                }else System.out.println("현재 매출 내역이 없습니다.\n");
                 break;
             case 6:
                 logout();
@@ -343,7 +400,42 @@ public class mainpage {
                                 MemberDto member = new MemberDto(inputDriveNum, inputDriveDate, inputBirth, inputName, inputAge, inputAddr, inputPhoneNum, inputEmail);
 
                                 //* 유효성 검사 - Controller에서 *//
-                                memberController.signup(member, checkPW);
+                                int validationResult = memberController.signup(member, checkPW);
+                                switch (validationResult){
+                                    case 1:
+                                        System.out.println("비밀번호 확인이 올바르지 않습니다. [다시 입력]");
+                                        break;
+                                    case 2:
+                                        System.out.println("올바른 운전면허번호가 아닙니다.");
+                                        break;
+                                    case 3:
+                                        System.out.println("올바른 날짜 형식이 아닙니다.");
+                                        break;
+                                    case 4:
+                                        System.out.println("올바른 날짜 형식이 아닙니다.");
+                                        break;
+                                    case 5:
+                                        System.out.println("이름을 입력해주세요.");
+                                        break;
+                                    case 6:
+                                        System.out.println("올바르지 않은 나이입니다.");
+                                        break;
+                                    case 7:
+                                        System.out.println("주소를 입력해주세요.");
+                                        break;
+                                    case 8:
+                                        System.out.println("올바른 휴대전화 형식이 아닙니다.");
+                                        break;
+                                    case 9:
+                                        System.out.println("올바른 이메일 형식이 아닙니다.");
+                                        break;
+                                    case 10:
+                                        System.out.println("회원가입에 성공했습니다. 로그인해주세요.");
+                                        break;
+                                    case 11:
+                                        System.out.println("안내) 회원가입 실패");
+                                        break;
+                                }
                             }else {                         //로그인한 사람이 있으면
                                 int session = logout();
                                 if(session==1)              //일반사용자 계정
@@ -372,6 +464,8 @@ public class mainpage {
                                     logindedMember();
                                 } else if (getName == "1") {      //운전면허번호 유효성 검사까지 통과했지만 고객 테이블에 해당 아이디가 없을 경우
                                     System.out.println("해당 운전면허번호 정보가 없습니다. 다시 확인해주세요.\n");
+                                } else if(getName == "2") {
+                                    System.out.println("올바른 운전면허번호가 아닙니다.\n");
                                 } else if (getName == null) {               //운전면허증번호는 있지만 비밀번호가 틀린 경우
                                     System.out.println("비밀번호가 틀렸습니다. 다시 확인해주세요.\n");
                                 }

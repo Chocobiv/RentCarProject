@@ -19,7 +19,7 @@ public class RentalDao {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/rent_car2?serverTimezone=UTC" , "root","1234");
         }
-        catch (Exception e) {System.out.println("[연동 실패]");}
+        catch (Exception e) {System.out.println("[연동 실패] "+e);}
     }
 
     //Dao 객체 생성

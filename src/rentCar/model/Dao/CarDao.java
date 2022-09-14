@@ -1,8 +1,6 @@
 package rentCar.model.Dao;
 
 import rentCar.model.Dto.CarDto;
-import rentCar.model.Dto.MemberDto;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -20,7 +18,7 @@ public class CarDao {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/rent_car2?serverTimezone=UTC" , "root","1234");
         }
-        catch (Exception e) {System.out.println("[연동 실패]");}
+        catch (Exception e) {System.out.println("[연동 실패] "+e);}
     }
 
     //매번 new CarDao 귀찮으니까 CarDao객체 생성해서 get하는 메소드 아예 만들어놓기

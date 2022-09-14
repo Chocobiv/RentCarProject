@@ -18,7 +18,7 @@ public class MemberDao {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/rent_car2?serverTimezone=UTC" , "root","1234");
         }
-        catch (Exception e) {System.out.println("[연동 실패]");}
+        catch (Exception e) {System.out.println("[연동 실패] "+e);}
     }
     public static MemberDao memberDao = new MemberDao() ; 	// 3. Dao 객체 생성
     //MemberDao.getmemberDao() : 매번 new MemberDao하기 귀찮으니까 MemberDao객체 생성해서 get하는 메소드
@@ -77,7 +77,6 @@ public class MemberDao {
             }
         }catch (Exception e) { System.out.println( e );}
         // 동일한 아이디가 존재하지 않으면
-        //System.out.println("해당 회원 정보가 없습니다. 운전면허증번호를 다시 확인하세요.");
         return null;
     }
     
@@ -99,8 +98,6 @@ public class MemberDao {
             return null;        //동일한 값이 없으면 = 실패
 
         }catch (Exception e) { System.out.println( e );}    //DB error
-        // 동일한 아이디가 존재하지 않으면
-        System.out.println("Dao) 해당 회원 정보가 없습니다.");
         return null;
     }
 
