@@ -4,8 +4,8 @@
   <img src="https://capsule-render.vercel.app/api?type=waving&color=EE6983&height=200&section=header&text=RentCar&fontSize=90&fontColor=FFF5E4" />
 
 
-DTO용도/사용이유
-MVC구조
+DTO용도/[사용이유]
+MVC구조/어떻게 썼는지
 로그인 유지?? 
 
 
