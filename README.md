@@ -11,23 +11,20 @@
   <h2> :heavy_check_mark: Features :heavy_check_mark: </h2>
   <h4> 각 페이지 별 핵심 기능 </h4> <br><br>
   
-  기능 &nbsp;| 설명
-  --- |---
-  회원가입| 각 입력에 따른 유효성 검사를 실시
-  &nbsp;| 비밀번호 확인이 틀리면 회원가입 실패하도록 처리
-  로그인/로그아웃| LoginDto를 이용해서 로그인 상태 유지 및 로그아웃 구현
-  아이디(운전면허증번호) 찾기| 이름과 전화번호를 입력해서 아이디(운전면허증번호) 찾기
-  비밀번호 찾기| 아이디(운전면허증번호)와 이메일을 입력해서 비밀번호 찾기
-  &nbsp;| 로고 position: absolute 사용
-  예약| javascript에서 시간과 날짜를 표현하는 객체를 사용하여 <br>배열과 객체 불러오기 이용
-  &nbsp;| 4자리 년도
-  &nbsp;| 월 [0~11] (※ 0 = 1월)
-  메뉴| menupage.html|  flex | menu_content 하위요소 가로배치
-  &nbsp;|&nbsp; |  justify-content | 하위요소 정렬 (가운데 일정하게 공간 만들어줌)
-  &nbsp;|&nbsp; |  flex | 메뉴 리스트 가로배치
-  &nbsp;|&nbsp; |  border | 글자 밑에 border 넣어서 밑줄 표현
-  &nbsp;|&nbsp; |  outline, outline-offset | 메뉴판에 outline 과 outline-offset 사용한 경계선 넣어 넓어 보이게 표현
-  &nbsp;|&nbsp; |  padding | 각 li에 padding 줘서 간격 부여
+  구분|기능 &nbsp;| 설명
+  ---|--- |---
+  [일반사용자] |회원가입| 각 입력에 따른 유효성 검사를 실시<br>비밀번호 확인이 틀리면 회원가입 실패하도록 처리
+  &nbsp;|로그인/로그아웃| LoginDto를 이용해서 로그인 상태 유지 및 로그아웃 구현
+  &nbsp;|아이디(운전면허증번호) 찾기| 이름과 전화번호를 입력해서 아이디(운전면허증번호) 찾기
+  &nbsp;|비밀번호 찾기| 아이디(운전면허증번호)와 이메일을 입력해서 비밀번호 찾기
+  &nbsp;|렌탈대여 | 대여 중이지 않은 렌트카의 목록을 보여주고 대여되도록 구현
+  &nbsp;|렌탈반납| 사용자가 현재 대여 중인 렌트카의 목록을 보여주고 반납하도록 구현
+  &nbsp;|내 정보 확인| 현재 로그인 중인 사용자의 정보 호출
+  [관리자]|차량등록 | 새로운 차량을 등록
+  &nbsp;|차량목록 조회| 전체 차량 목록 조회
+  &nbsp;|대여현황 조회 | 현재 대여 중인 전체 차량 목록 조회
+  &nbsp;|매출현황 | 매출현황을 가시적으로 한 눈에 볼 수 있도록 구현
+  &nbsp;|차량삭제 | 등록되어 있는 차량 삭제 로직 구현
   
   <br><br>
   
@@ -58,10 +55,7 @@
   <h4> <img src="https://img.shields.io/badge/JAVA-007396?style=flat-square&logo=java&logoColor=white"/> <img src="https://img.shields.io/badge/MySQL-4479a1?style=flat-square&logo=mysql&logoColor=white"/> </h4> <br><br>
   
   <h2> :round_pushpin: 추후 발전 방향 :round_pushpin: </h2>
-  1. 반응형 웹페이지로 업그레이드<br>
-  2. js추가해서 유효성 검사<br>
-  3. 회원가입/로그인/문의하기 백엔드 기능 추가<br>
-  4. 실시간 챗봇 예약상담<br>
-  5. 2단 레이아웃을 사용하여 공간을 활용하고 사용자의 편의성을 증가<br>
-  6. 커스터마이징을 사용하여 서브메뉴 추가<br>
+  1. 세션 유지를 위해 static을 사용했지만, 추후에 반드시 보안 처리가 필요<br>
+  2. 이번 Java Console 프로젝트는 개인 프로젝트라 규모를 축소해서 대여와 차량, 고객 DB에 집중하여 개발했는데,<br> 추후에는 프로젝트를 확장하여 결제와 보험 등의 DB도 활용할 수 있는 응용 프로그램을 개발하면 좋을 것 같다<br>
+  3. Httpsession으로 세션 ID를 담고 있는 쿠키를 생성하고, 클라이언트에게 전달하는 방식으로 세션 유지를 하면 좋을 것 같다<br>
 </div>
