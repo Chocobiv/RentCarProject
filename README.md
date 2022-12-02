@@ -9,7 +9,7 @@
 <br> <br>
 
   <h2> :heavy_check_mark: Features :heavy_check_mark: </h2>
-  <h4> 각 페이지 별 핵심 기능 </h4> <br><br>
+  <h4> 각 기능 별 설명 </h4> <br>
   
   구분|기능 &nbsp;| 설명
   ---|--- |---
