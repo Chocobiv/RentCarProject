@@ -3,28 +3,11 @@
 <div align=center>
   <img src="https://capsule-render.vercel.app/api?type=waving&color=EE6983&height=200&section=header&text=RentCar&fontSize=90&fontColor=FFF5E4" />
 
-
-DTO용도/[사용이유]
-MVC구조/어떻게 썼는지
-로그인 유지?? 
-
-
-회원가입
-로그인/로그아웃
-아이디 찾기, 비밀번호 찾기
-대여가능 차량 목록 조회
-렌탈대여/반납
-내정보
-관리자페이지 - 차량등록, 렌탈현황 조회, 매출현황, 차량삭제
-
   <h2> :star: 주제 :star: </h2>
   <h3> 렌트카 대여 서비스 </h3><br><br> 
 
-</div>
 <br> <br>
 
-
-<div align=center>
   <h2> :heavy_check_mark: Features :heavy_check_mark: </h2>
   <h4> 각 페이지 별 핵심 기능 </h4> <br><br>
   
@@ -46,15 +29,25 @@ MVC구조/어떻게 썼는지
   &nbsp;|&nbsp; |  outline, outline-offset | 메뉴판에 outline 과 outline-offset 사용한 경계선 넣어 넓어 보이게 표현
   &nbsp;|&nbsp; |  padding | 각 li에 padding 줘서 간격 부여
   
-  
-  <br><br><h2> :raised_hands: 역할 분담 :raised_hands: </h2>
-  <h4> 박수현 : GIT 통합 및 관리 </h4>
-  메뉴 / 갤러리 / 게시판
-   <br><br><br>
+  <br><br>
   
   <h2> :calendar: 일정 계획 :calendar: </h2>
-  <h3> 08/24 </h3>
-   공통 : 주제 선정 / 페이지 분류 / 페이지 분담 <br> <br> 
+   <br>
+   
+   날짜 &nbsp; | 구현내용
+  --- |---
+  8/30| 프로젝트 생성 및 MVC 구조 틀 잡기
+  8/31| 회원가입 구현 중
+  9/1|	유효성 검사 구현 완료
+  9/2|	회원가입 구현 완료 / 로그인 구현 완료 / 아이디 찾기 / 비밀번호 찾기  구현 완료
+  9/5|	관리자의 차량등록 구현 완료 / 로그인 유지 / 로그아웃 구현 완료
+  9/6|	렌탈대여 구현 완료 / 일반 사용자와 관리자 안내 메시지 및 메뉴 메소드로 구분
+  9/7|	렌탈대여, 차량등록 테스트 및 피드백
+  9/8|	차량DB수정(차량반납여부 컬럼 추가) 및 SQL문 수정/<br> 로그인 후 회원가입 선택 시 로그아웃할건지 물어보는 루트로 수정/ <br>대여 시, 대여상태 '대여중' 으로 insert/ <br>대여 시, 차량테이블에서 차량반납여부 대여중으로 변경
+  9/10|	렌탈대여 전에 대여가능 차량 목록 조회 기능 추가
+  9/11|	렌탈반납, 렌탈현황 조회 구현 완료
+  9/13|	매출현황 기능 추가/ 대여하지 않은 사용자가 렌탈반납 누를 경우 안내 메시지 출력
+  9/14|	내정보 구현 완료 / 차량삭제 구현 완료 / controller 유지보수
    
 <br><br>
 
